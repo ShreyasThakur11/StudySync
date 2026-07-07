@@ -348,6 +348,22 @@ document.addEventListener('DOMContentLoaded', () => {
     //  5-DOMAINS NEWS SCRAPER PIPELINE
     // ═══════════════════════════════════════════════════════════════════════
 
+    function showLoader(show) {
+        const loader = document.getElementById('feed-loader');
+        if (loader) {
+            if (show) loader.classList.remove('hidden');
+            else loader.classList.add('hidden');
+        }
+    }
+
+    function showError(show) {
+        const error = document.getElementById('feed-error');
+        if (error) {
+            if (show) error.classList.remove('hidden');
+            else error.classList.add('hidden');
+        }
+    }
+
     let loadedArticles = {};
 
     function initNewsScraper() {
