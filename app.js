@@ -629,7 +629,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Set header date widget
-    const dateText = now.toLocaleDateString('en-US', {
+    const dateText = new Date().toLocaleDateString('en-US', {
         weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
     });
     document.querySelector('.date-text').textContent = dateText;
