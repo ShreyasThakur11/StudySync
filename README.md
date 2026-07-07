@@ -1,6 +1,7 @@
 # 📚 StudySync — MBA Study Group Management System
 
-> **Phase 1 · Foundation** | Google Sheets + Google Forms + Apps Script
+> 🌐 **Live Web Portal**: **[shreyasthakur11.github.io/StudySync](https://shreyasthakur11.github.io/StudySync/)**  
+> Browse live business and technology news feeds, format them instantly with one click, and copy the post to share in your study groups.
 
 ---
 
@@ -168,13 +169,17 @@ See [`docs/automation-integration-guide.md`](docs/automation-integration-guide.m
 
 ```
 StudySync/
+├── index.html                         ← Web Portal index page (GitHub Pages)
+├── style.css                          ← Glassmorphism portal styles
+├── app.js                             ← RSS feed parser & scheduler logic
 ├── README.md                          ← You are here
 ├── apps-script/
-│   └── StudySync.gs                   ← Complete Apps Script (single file)
+│   ├── StudySync.gs                   ← Phase 1 Spreadsheet Setup script
+│   └── Reminders.gs                   ← Phase 2 Daily Reminders & Triggers
 └── docs/
-    ├── setup-guide.md                 ← Step-by-step setup
+    ├── setup-guide.md                 ← Step-by-step setup guide
     ├── sheet-structure.md             ← Detailed sheet documentation
-    └── automation-integration-guide.md ← Phase 2 planning guide
+    └── automation-integration-guide.md ← Phase 2 planning & integration guide
 ```
 
 ---
