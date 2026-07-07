@@ -5,21 +5,21 @@ document.addEventListener('DOMContentLoaded', () => {
     // ═══════════════════════════════════════════════════════════════════════
 
     const MEMBERS = [
-        'Tanish Raina',
-        'B Chandra Mouli',
+        'Aayush',
+        'Anvitha Reddy',
         'Arnav Bittu',
-        'Rayapati Chandana Sushmitha',
-        'Yella RamaSurya Pavan',
-        'Thirupathi Koushik Sai',
-        'Y Dhruv Suhaas',
-        'Siddhant Mishra',
-        'Ganesh Kumar R',
         'Aryan Raj',
-        'Malde Aayush Pritesh',
-        'Shreyas Mahendra Thakur',
-        'Koppoal Likhita',
-        'Seera Naveen Kumar',
-        'N.S.V.N. Sathwika'
+        'B Chandra Mouli',
+        'Dhruv',
+        'Ganesh Kumar R',
+        'Koushik',
+        'Likhita',
+        'Naveen',
+        'Sathwika',
+        'Shreyas',
+        'Siddhant Mishra',
+        'Sushmitha',
+        'Tanish Raina'
     ];
 
     // 5 News Domains and their corresponding RSS feed queries (focused on high-quality news sources with working links)
@@ -171,9 +171,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     dateStr: formatDateStr(current),
                     dayName: dayName,
                     assigned: MEMBERS[mIdx % MEMBERS.length],
-                    backup: MEMBERS[(mIdx + 1) % MEMBERS.length],
                     category: 'All 5 Domains',
-                    status: current < new Date().setHours(0,0,0,0) ? 'Completed' : 'Pending'
+                    status: current <= new Date().setHours(0,0,0,0) ? 'Completed' : 'Pending'
                 });
                 mIdx++;
             }
@@ -208,7 +207,6 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (todayDuty) {
             document.getElementById('today-poster').textContent = todayDuty.assigned;
-            document.getElementById('today-backup').textContent = todayDuty.backup;
             document.getElementById('poster-avatar').textContent = todayDuty.assigned.charAt(0);
             
             if (isSameDay(todayDuty.date, today)) {
@@ -218,7 +216,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         } else {
             document.getElementById('today-poster').textContent = "No Duty";
-            document.getElementById('today-backup').textContent = "—";
             document.getElementById('today-badge').textContent = "Offline";
         }
     }
@@ -247,13 +244,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             assignedSelect += `</select>`;
 
-            // Build dropdown select options for Backup Poster
-            let backupSelect = `<select class="table-select" data-row="${rowIndex}" data-col="backup">`;
-            MEMBERS.forEach(m => {
-                const selected = m === row.backup ? 'selected' : '';
-                backupSelect += `<option value="${m}" ${selected}>${m}</option>`;
-            });
-            backupSelect += `</select>`;
             
             const statusClass = row.status === 'Completed' ? 'status-cell-completed' : 'status-cell-pending';
 
@@ -261,7 +251,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td>${row.dateStr} ${isToday ? '📌' : ''}</td>
                 <td>${row.dayName}</td>
                 <td>${assignedSelect}</td>
-                <td>${backupSelect}</td>
                 <td>${row.category}</td>
                 <td><span class="${statusClass}">${row.status}</span></td>
             `;
@@ -299,16 +288,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const dateText = tr.cells[0].textContent.toLowerCase();
             const dayText = tr.cells[1].textContent.toLowerCase();
             const assignedSelect = tr.cells[2].querySelector('select');
-            const backupSelect = tr.cells[3].querySelector('select');
-            const catText = tr.cells[4].textContent.toLowerCase();
+            const catText = tr.cells[3].textContent.toLowerCase();
             
             const assignedVal = assignedSelect ? assignedSelect.value.toLowerCase() : '';
-            const backupVal = backupSelect ? backupSelect.value.toLowerCase() : '';
             
             if (dateText.includes(query) || 
                 dayText.includes(query) || 
                 assignedVal.includes(query) || 
-                backupVal.includes(query) || 
                 catText.includes(query)) {
                 tr.style.display = "";
             } else {
@@ -327,10 +313,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.getElementById('btn-export-csv').addEventListener('click', () => {
-        let csvContent = "data:text/csv;charset=utf-8,Date,Day,Primary Poster,Backup Poster,Category,Status\n";
+        let csvContent = "data:text/csv;charset=utf-8,Date,Day,Primary Poster,Category,Status\n";
         
         activeSchedule.forEach(row => {
-            const line = `"${row.dateStr}","${row.dayName}","${row.assigned}","${row.backup}","${row.category}","${row.status}"`;
+            const line = `"${row.dateStr}","${row.dayName}","${row.assigned}","${row.category}","${row.status}"`;
             csvContent += line + "\n";
         });
         

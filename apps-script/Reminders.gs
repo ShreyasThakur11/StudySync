@@ -114,7 +114,7 @@ function sendDailyReminder() {
     return;
   }
   
-  const { name, dateStr, category, status, backupName } = assignment;
+  const { name, dateStr, category, status } = assignment;
   Logger.log(`Today's assignment: Name = ${name}, Status = ${status}, Category = ${category}`);
   
   // Stop if today's assignment is already marked completed
@@ -151,8 +151,7 @@ function sendDailyReminder() {
     `Hi *${name}*,\n\n` +
     `You are the primary poster today for the *${groupName}*.\n\n` +
     `▪️ *Category:* ${category}\n` +
-    `▪️ *Date:* ${dateStr}\n` +
-    `▪️ *Backup Poster:* ${backupName || 'None'}\n\n` +
+    `▪️ *Date:* ${dateStr}\n\n` +
     `Please refer to the *📰 News Sources* tab in your StudySync spreadsheet for resources. Once you have posted the daily summary to the group, please mark it as *Completed* using the custom menu.\n\n` +
     `Thank you!\n` +
     `— StudySync System (SPoC: ${spocName})`;
@@ -222,7 +221,7 @@ function sendEveningFollowUp() {
     `▪️ *Category:* ${category}\n` +
     `▪️ *Status:* Pending\n\n` +
     `Please share today's news updates in the study group and mark this task as *Completed*.\n\n` +
-    `If you run into issues or cannot post, please contact your Backup member or SPoC *${spocName}* immediately.\n\n` +
+    `If you run into issues or cannot post, please contact your SPoC *${spocName}* immediately.\n\n` +
     `Thank you!\n` +
     `— StudySync System`;
 
@@ -508,9 +507,9 @@ function _getAssignedMemberDetails(ss, targetDate) {
         dateStr: Utilities.formatDate(dateObj, timeZone, 'dd MMM yyyy'),
         dayName: row[1],
         name: row[2],
-        backupName: row[3],
-        category: row[4],
-        status: row[5]
+        backupName: '',
+        category: row[3],
+        status: row[4]
       };
     }
   }

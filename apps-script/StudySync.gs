@@ -34,21 +34,21 @@ const CONFIG = {
 
   /** Pre-populated member list – maintain insertion order */
   MEMBERS: [
-    'Tanish Raina',
-    'B Chandra Mouli',
+    'Aayush',
+    'Anvitha Reddy',
     'Arnav Bittu',
-    'Rayapati Chandana Sushmitha',
-    'Yella RamaSurya Pavan',
-    'Thirupathi Koushik Sai',
-    'Y Dhruv Suhaas',
-    'Siddhant Mishra',
-    'Ganesh Kumar R',
     'Aryan Raj',
-    'Malde Aayush Pritesh',
-    'Shreyas Mahendra Thakur',
-    'Koppoal Likhita',
-    'Seera Naveen Kumar',
-    'N.S.V.N. Sathwika'
+    'B Chandra Mouli',
+    'Dhruv',
+    'Ganesh Kumar R',
+    'Koushik',
+    'Likhita',
+    'Naveen',
+    'Sathwika',
+    'Shreyas',
+    'Siddhant Mishra',
+    'Sushmitha',
+    'Tanish Raina'
   ],
 
   /** Colour palette – used across all sheets */
@@ -342,9 +342,9 @@ function _setupMembers(ss, sh) {
 
 function _setupSchedule(ss, sh) {
   const C    = CONFIG.C;
-  const COLS = 8;
+  const COLS = 7;
 
-  const hdrs = ['Date', 'Day', 'Assigned Member', 'Backup Member',
+  const hdrs = ['Date', 'Day', 'Assigned Member',
                  'News Category', 'Status', 'Completed At', 'Remarks'];
 
   _mergeTitle(sh, 1, 1, 1, COLS, '📅  NEWS POSTING SCHEDULE', C.NAVY, 16, 52);
@@ -357,7 +357,7 @@ function _setupSchedule(ss, sh) {
   const schedule = _generateSchedule(new Date(), CONFIG.SCHEDULE_DAYS, false);
 
   const data = schedule.map(row => [
-    row.date, row.dayName, row.assigned, row.backup, row.category, 'Pending', '', ''
+    row.date, row.dayName, row.assigned, row.category, 'Pending', '', ''
   ]);
 
   if (data.length) sh.getRange(4, 1, data.length, COLS).setValues(data);
@@ -428,7 +428,6 @@ function _generateSchedule(startDate, totalDays, includeWeekends) {
         date    : new Date(d),
         dayName : ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][dow],
         assigned: members[mIdx % members.length],
-        backup  : members[(mIdx + 1) % members.length],
         category: 'All 5 Domains',
       });
       mIdx++;
@@ -541,13 +540,13 @@ function _setupDashboard(ss, sh) {
   sh.setRowHeight(16, 14); // spacer
 
   // ── UPCOMING SCHEDULE (7 days) ───────────────────────────────────────
-  sh.getRange(17, 1, 1, 6).merge()
+  sh.getRange(17, 1, 1, 5).merge()
     .setValue('📋  UPCOMING SCHEDULE — Next 7 Days')
     .setBackground(C.NAVY).setFontColor(C.WHITE)
     .setFontWeight('bold').setFontSize(12).setHorizontalAlignment('center');
   sh.setRowHeight(17, 33);
 
-  const upHdrs = ['Date', 'Day', 'Assigned Member', 'Backup Member', 'Category', 'Status'];
+  const upHdrs = ['Date', 'Day', 'Assigned Member', 'Category', 'Status'];
   _writeRow(sh, 18, 1, upHdrs, C.NAVY_LIGHT, C.WHITE, true, 10, 29);
 
   for (let i = 0; i < 7; i++) {
@@ -558,9 +557,8 @@ function _setupDashboard(ss, sh) {
     sh.getRange(row, 1).setFormula(`=IFERROR(TEXT('📅 Schedule'!A${sRow},"dd/mm/yyyy"),"")`).setBackground(bg).setHorizontalAlignment('center');
     sh.getRange(row, 2).setFormula(`=IFERROR('📅 Schedule'!B${sRow},"")`).setBackground(bg).setHorizontalAlignment('center');
     sh.getRange(row, 3).setFormula(`=IFERROR('📅 Schedule'!C${sRow},"")`).setBackground(bg);
-    sh.getRange(row, 4).setFormula(`=IFERROR('📅 Schedule'!D${sRow},"")`).setBackground(bg);
+    sh.getRange(row, 4).setFormula(`=IFERROR('📅 Schedule'!D${sRow},"")`).setBackground(bg).setHorizontalAlignment('center');
     sh.getRange(row, 5).setFormula(`=IFERROR('📅 Schedule'!E${sRow},"")`).setBackground(bg).setHorizontalAlignment('center');
-    sh.getRange(row, 6).setFormula(`=IFERROR('📅 Schedule'!F${sRow},"")`).setBackground(bg).setHorizontalAlignment('center');
   }
 
   sh.setRowHeight(26, 14); // spacer
@@ -1061,12 +1059,11 @@ function _setupNamedRanges(ss, S) {
 
     // Schedule
     const sc = S.schedule;
-    ss.setNamedRange('SCH_AllData',   sc.getRange('A4:H100'));
+    ss.setNamedRange('SCH_AllData',   sc.getRange('A4:G100'));
     ss.setNamedRange('SCH_Dates',     sc.getRange('A4:A100'));
     ss.setNamedRange('SCH_Assigned',  sc.getRange('C4:C100'));
-    ss.setNamedRange('SCH_Backup',    sc.getRange('D4:D100'));
-    ss.setNamedRange('SCH_Status',    sc.getRange('F4:F100'));
-    ss.setNamedRange('SCH_CompletedAt', sc.getRange('G4:G100'));
+    ss.setNamedRange('SCH_Status',    sc.getRange('E4:E100'));
+    ss.setNamedRange('SCH_CompletedAt', sc.getRange('F4:F100'));
 
     Logger.log('✅  Named ranges created');
   } catch (e) {
@@ -1130,28 +1127,28 @@ function refreshSchedule() {
   const incWeekends = enableWeekends === true || enableWeekends === 'TRUE';
 
   // Save completed rows
-  const existing = scSheet.getRange(4, 1, 60, 8).getValues();
+  const existing = scSheet.getRange(4, 1, 60, 7).getValues();
   const done = {};
   existing.forEach(row => {
-    if (row[0] && row[5] === 'Completed') {
+    if (row[0] && row[4] === 'Completed') {
       const k = Utilities.formatDate(new Date(row[0]), Session.getScriptTimeZone(), 'yyyy-MM-dd');
-      done[k] = { at: row[6], remarks: row[7] };
+      done[k] = { at: row[5], remarks: row[6] };
     }
   });
 
   const schedule = _generateSchedule(startDate, scheduleDays, incWeekends);
 
-  scSheet.getRange(4, 1, 70, 8).clearContent();
+  scSheet.getRange(4, 1, 70, 7).clearContent();
 
   const data = schedule.map(r => {
     const k  = Utilities.formatDate(r.date, Session.getScriptTimeZone(), 'yyyy-MM-dd');
     const ex = done[k];
-    return [r.date, r.dayName, r.assigned, r.backup, r.category,
+    return [r.date, r.dayName, r.assigned, r.category,
             ex ? 'Completed' : 'Pending',
             ex ? ex.at      : '',
             ex ? ex.remarks : ''];
   });
-  scSheet.getRange(4, 1, data.length, 8).setValues(data);
+  scSheet.getRange(4, 1, data.length, 7).setValues(data);
   scSheet.getRange(4, 1, data.length, 1).setNumberFormat('dd/mm/yyyy');
 
   ui.alert('✅  Schedule refreshed successfully!');
