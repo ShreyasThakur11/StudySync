@@ -1,4 +1,4 @@
-// StudySync Portal Application Logic
+// StudySync Portal Application Logic — Version 2.5
 document.addEventListener('DOMContentLoaded', () => {
     // ═══════════════════════════════════════════════════════════════════════
     //  GLOBAL DATA & CONFIGURATION
@@ -22,93 +22,86 @@ document.addEventListener('DOMContentLoaded', () => {
         'N.S.V.N. Sathwika'
     ];
 
-    const NEWS_CATEGORIES = [
-        'Business & Corporate',
-        'Economics & Policy',
-        'Finance & Markets',
-        'Technology & AI',
-        'Strategy & Consulting',
-        'Operations & Supply Chain',
-        'ESG & Sustainability',
-        'Startups & Entrepreneurship',
-        'Leadership & Management',
-        'Indian Economy',
-        'Global Economy',
-        'Government & Regulations'
+    // 5 News Domains and their corresponding RSS feed queries (focused on high-quality news sources with working links)
+    const DOMAIN_FEEDS = [
+        {
+            id: 'commerce',
+            name: '🛒 Major Commerce News',
+            feedUrl: 'https://news.google.com/rss/search?q=(commerce+OR+retail+OR+e-commerce)+(site:reuters.com+OR+site:bloomberg.com+OR+site:cnbc.com+OR+site:wsj.com+OR+site:nytimes.com)&hl=en-US&gl=US&ceid=US:en'
+        },
+        {
+            id: 'business',
+            name: '🏢 Business News',
+            feedUrl: 'https://news.google.com/rss/search?q=(business+OR+corporate+OR+mergers)+(site:reuters.com+OR+site:bloomberg.com+OR+site:cnbc.com+OR+site:wsj.com+OR+site:ft.com)&hl=en-US&gl=US&ceid=US:en'
+        },
+        {
+            id: 'economics',
+            name: '📊 Economics News',
+            feedUrl: 'https://news.google.com/rss/search?q=(economics+OR+inflation+OR+interest+rates)+(site:reuters.com+OR+site:bloomberg.com+OR+site:cnbc.com+OR+site:wsj.com+OR+site:ft.com)&hl=en-US&gl=US&ceid=US:en'
+        },
+        {
+            id: 'industry',
+            name: '🏭 Industry News',
+            feedUrl: 'https://news.google.com/rss/search?q=(manufacturing+OR+logistics+OR+supply+chain+OR+factory)+(site:reuters.com+OR+site:bloomberg.com+OR+site:cnbc.com+OR+site:wsj.com)&hl=en-US&gl=US&ceid=US:en'
+        },
+        {
+            id: 'technology',
+            name: '🚀 Technology & Innovation',
+            feedUrl: 'https://news.google.com/rss/search?q=(technology+OR+innovation+OR+artificial+intelligence+OR+semiconductors)+(site:techcrunch.com+OR+site:wired.com+OR+site:reuters.com+OR+site:bloomberg.com+OR+site:cnbc.com)&hl=en-US&gl=US&ceid=US:en'
+        }
     ];
 
-    // RSS Feed Source URLs
-    const FEED_SOURCES = {
-        techcrunch: 'https://techcrunch.com/feed/',
-        cnbc: 'https://www.cnbc.com/id/10001147/device/rss/rss.html',
-        hbr: 'https://news.google.com/rss/search?q=site:hbr.org&hl=en-US&gl=US&ceid=US:en'
-    };
+    // Fallback proxies in order of reliability
+    const PROXIES = [
+        'https://api.allorigins.win/raw?url=',
+        'https://corsproxy.io/?',
+        'https://api.codetabs.com/v1/proxy?url='
+    ];
 
-    // CORS Proxy for client-side fetching
-    const PROXY_URL = 'https://api.allorigins.win/raw?url=';
-
-    // Mock Backup Articles (Loaded immediately on fetch failures / offline fallback)
+    // Mock Backup Articles (Active external working links as fallback)
     const FALLBACK_ARTICLES = {
-        techcrunch: [
-            {
-                title: "Nvidia unveils next-generation AI chip architecture 'Rubin'",
-                description: "Nvidia has announced its new Rubin AI chip platform, which will succeed the upcoming Blackwell architecture in 2026. The announcement highlights the company's aggressive yearly cadence for AI hardware. Demand for data center compute continues to outstrip global supply.",
-                link: "https://techcrunch.com/nvidia-rubin-ai-chips/",
-                pubDate: new Date().toUTCString()
-            },
-            {
-                title: "OpenAI signs multi-year content licensing deal with major news publishers",
-                description: "OpenAI has secured agreements with major media organizations to display news content in ChatGPT. The partnerships aim to provide users with real-time, high-quality news sources. Publishers will receive payment and attribution for their material used.",
-                link: "https://techcrunch.com/openai-content-licensing-deal/",
-                pubDate: new Date().toUTCString()
-            }
-        ],
-        cnbc: [
-            {
-                title: "Federal Reserve signals higher-for-longer interest rates amid inflation pressures",
-                description: "The Federal Reserve held key interest rates steady and indicated that only one rate cut is projected by the end of the year. Economists point to stubborn inflation and a resilient job market as reasons for the hawkish stance. Global bond markets reacted with climbing yields.",
-                link: "https://www.cnbc.com/fed-interest-rates-inflation/",
-                pubDate: new Date().toUTCString()
-            },
-            {
-                title: "India GDP growth surges to 8.2% for FY24, beating market forecasts",
-                description: "India's economy registered stellar expansion driven by strong manufacturing and government infrastructure investment. Global investment banks are raising their growth projections for India, cementing its position as the fastest-growing major economy. Retail consumption showed recovery signs.",
-                link: "https://www.cnbc.com/india-gdp-growth-fy24/",
-                pubDate: new Date().toUTCString()
-            }
-        ],
-        hbr: [
-            {
-                title: "Leading your team through AI-driven structural changes",
-                description: "Generative AI is changing workflow roles across operations, marketing, and engineering. Managers must design training paths that address skill gaps while reducing employee anxiety. Transparency and strategic vision are key to successful deployment.",
-                link: "https://hbr.org/leading-teams-through-ai-change/",
-                pubDate: new Date().toUTCString()
-            },
-            {
-                title: "Why sustainable supply chains are resilient supply chains",
-                description: "Recent environmental regulations require corporations to audit carbon footprints across scope 1, 2, and 3 emissions. Companies that adopt green supply operations mitigate climate risks and find cost savings through material efficiencies. Diversification reduces logistics bottlenecks.",
-                link: "https://hbr.org/sustainable-resilient-supply-chains/",
-                pubDate: new Date().toUTCString()
-            }
-        ]
+        commerce: {
+            title: "Global e-commerce retail sales projected to top $6.5 trillion this fiscal year",
+            description: "Online retail activities continue to see rapid expansion globally, led by growth in emerging market spaces. Consumer spending patterns indicate shifts toward mobile checkout systems and social shopping integrations. Supply logistics have optimized delivery times.",
+            link: "https://www.reuters.com/business/retail-consumer/",
+            pubDate: new Date().toUTCString()
+        },
+        business: {
+            title: "Boardroom restructuring surges across corporate finance sectors",
+            description: "Major corporations are implementing leadership swaps to navigate changing macroeconomic trends and AI integrations. Consolidation remains active as acquisition deals increase in tech and healthcare. Investors push for operational efficiencies.",
+            link: "https://www.cnbc.com/business/",
+            pubDate: new Date().toUTCString()
+        },
+        economics: {
+            title: "Central banks hold rates steady as global inflation signs stabilize",
+            description: "Financial authorities indicate policy actions will remain cautious until consumer pricing declines further. Jobs markets show unexpected resilience, keeping wage growth elevated. Economists project mild expansion indices for the upcoming quarter.",
+            link: "https://www.bloomberg.com/markets",
+            pubDate: new Date().toUTCString()
+        },
+        industry: {
+            title: "Smart factory investments accelerate to hedge supply chain vulnerabilities",
+            description: "Manufacturing leaders are deploying automation and local sourcing channels to reduce delivery dependencies. Raw material inventories are stabilizing, though shipping container shortages persist in vital trade passages. Efficiency rates have hit five-year highs.",
+            link: "https://www.reuters.com/business/coporate-industrial-goods/",
+            pubDate: new Date().toUTCString()
+        },
+        technology: {
+            title: "Semiconductor innovations breakthrough limitations in high-performance computing",
+            description: "New chip designs enable faster processing speeds while reducing power draw requirements for heavy AI model workloads. Hyperscalers are competing for early allocations of upcoming architectures. Developer frameworks continue to expand rapidly.",
+            link: "https://techcrunch.com/category/startups/",
+            pubDate: new Date().toUTCString()
+        }
     };
 
-    // ═══════════════════════════════════════════════════════════════════════
-    //  LOCAL STORAGE MANAGEMENT FOR LINKS
-    // ═══════════════════════════════════════════════════════════════════════
-
-    // Store spreadsheet and form links in localStorage so SPoCs can customize it
+    // Stored Google Sheets & Forms link persistence
     const DEFAULT_SPREADSHEET = "https://docs.google.com/spreadsheets";
     const DEFAULT_FORM = "https://docs.google.com/forms";
-
     let spreadsheetLink = localStorage.getItem('studysync_sheet_link') || DEFAULT_SPREADSHEET;
     let formLink = localStorage.getItem('studysync_form_link') || DEFAULT_FORM;
 
-    // Set hrefs
     document.getElementById('link-google-sheet').href = spreadsheetLink;
     document.getElementById('link-google-form').href = formLink;
 
-    // Allow editing links if clicked with Ctrl key, or direct prompt
+    // Allow SPoC to configure URLs with right click/context menu
     document.querySelectorAll('.quick-link-item').forEach(el => {
         el.addEventListener('contextmenu', (e) => {
             e.preventDefault();
@@ -130,35 +123,56 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // ═══════════════════════════════════════════════════════════════════════
-    //  SCHEDULE GENERATION & CORRELATION
+    //  SCHEDULE ROTATION & MANAGEMENT
     // ═══════════════════════════════════════════════════════════════════════
 
-    // Starting Date for Schedule Rotation (Epoch: July 7, 2026)
     const SCHEDULE_START = new Date('2026-07-07');
     SCHEDULE_START.setHours(0,0,0,0);
-
+    
     let activeSchedule = [];
 
-    function generateRotationSchedule(startDate, length = 30, includeWeekends = false) {
+    // Initialize schedule: load from localStorage if exists, else generate fresh
+    function initSchedule() {
+        const stored = localStorage.getItem('studysync_editable_schedule');
+        if (stored) {
+            try {
+                const parsed = JSON.parse(stored);
+                // Convert date string keys back to Date objects
+                activeSchedule = parsed.map(row => ({
+                    ...row,
+                    date: new Date(row.date)
+                }));
+            } catch (e) {
+                console.error("Error loading stored schedule:", e);
+                activeSchedule = generateDefaultSchedule();
+            }
+        } else {
+            activeSchedule = generateDefaultSchedule();
+        }
+        
+        renderSchedule(activeSchedule);
+        updateHeroDashboard();
+    }
+
+    function generateDefaultSchedule(length = 30) {
         const schedule = [];
         let mIdx = 0;
-        const current = new Date(startDate);
+        const current = new Date(SCHEDULE_START);
         current.setHours(0,0,0,0);
         
         while (schedule.length < length) {
             const dow = current.getDay();
             const isWeekend = dow === 0 || dow === 6;
             
-            if (includeWeekends || !isWeekend) {
+            if (!isWeekend) {
                 const dayName = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][dow];
-                
                 schedule.push({
                     date: new Date(current),
                     dateStr: formatDateStr(current),
                     dayName: dayName,
                     assigned: MEMBERS[mIdx % MEMBERS.length],
                     backup: MEMBERS[(mIdx + 1) % MEMBERS.length],
-                    category: NEWS_CATEGORIES[mIdx % NEWS_CATEGORIES.length],
+                    category: 'All 5 Domains',
                     status: current < new Date().setHours(0,0,0,0) ? 'Completed' : 'Pending'
                 });
                 mIdx++;
@@ -181,151 +195,239 @@ document.addEventListener('DOMContentLoaded', () => {
                d1.getDate() === d2.getDate();
     }
 
-    // Populate Date widget
-    const now = new Date();
-    document.querySelector('.date-text').textContent = now.toLocaleDateString('en-US', {
-        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
-    });
-
-    // Generate schedule
-    activeSchedule = generateRotationSchedule(SCHEDULE_START, 30, false);
-    renderSchedule(activeSchedule);
-
-    // Update Hero Dashboard based on today's date
-    const today = new Date();
-    today.setHours(0,0,0,0);
-    
-    // Find today's row or next upcoming row
-    let todayDuty = activeSchedule.find(row => isSameDay(row.date, today));
-    
-    // If weekend or date outside 30 days, find first pending row
-    if (!todayDuty) {
-        todayDuty = activeSchedule.find(row => row.date >= today);
-    }
-    
-    if (todayDuty) {
-        document.getElementById('today-poster').textContent = todayDuty.assigned;
-        document.getElementById('today-category').textContent = todayDuty.category;
-        document.getElementById('today-backup').textContent = todayDuty.backup;
+    function updateHeroDashboard() {
+        const today = new Date();
+        today.setHours(0,0,0,0);
         
-        // Initial letter avatar
-        document.getElementById('poster-avatar').textContent = todayDuty.assigned.charAt(0);
+        let todayDuty = activeSchedule.find(row => isSameDay(row.date, today));
         
-        if (isSameDay(todayDuty.date, today)) {
-            document.getElementById('today-badge').textContent = "Active Today";
-        } else {
-            document.getElementById('today-badge').textContent = `Next Post: ${todayDuty.dateStr}`;
+        // Weekend or past dates fallback to first pending row
+        if (!todayDuty) {
+            todayDuty = activeSchedule.find(row => row.date >= today);
         }
-    } else {
-        document.getElementById('today-poster').textContent = "No Duty";
-        document.getElementById('today-category').textContent = "—";
-        document.getElementById('today-backup').textContent = "—";
-        document.getElementById('today-badge').textContent = "Offline";
+        
+        if (todayDuty) {
+            document.getElementById('today-poster').textContent = todayDuty.assigned;
+            document.getElementById('today-backup').textContent = todayDuty.backup;
+            document.getElementById('poster-avatar').textContent = todayDuty.assigned.charAt(0);
+            
+            if (isSameDay(todayDuty.date, today)) {
+                document.getElementById('today-badge').textContent = "Active Today";
+            } else {
+                document.getElementById('today-badge').textContent = `Next Post: ${todayDuty.dateStr}`;
+            }
+        } else {
+            document.getElementById('today-poster').textContent = "No Duty";
+            document.getElementById('today-backup').textContent = "—";
+            document.getElementById('today-badge').textContent = "Offline";
+        }
     }
 
-    // ═══════════════════════════════════════════════════════════════════════
-    //  NEWS SCRAPING & FORMATTING ENGINE
-    // ═══════════════════════════════════════════════════════════════════════
+    // Render schedule table with inline dropdown select inputs
+    function renderSchedule(scheduleData) {
+        const tbody = document.getElementById('schedule-tbody');
+        tbody.innerHTML = '';
+        
+        const todayDate = new Date();
+        todayDate.setHours(0,0,0,0);
 
-    let activeSource = 'techcrunch';
-    fetchFeed(activeSource);
+        scheduleData.forEach((row, rowIndex) => {
+            const tr = document.createElement('tr');
+            
+            const isToday = isSameDay(row.date, todayDate);
+            if (isToday) {
+                tr.className = 'today-row';
+            }
+            
+            // Build dropdown select options for Assigned Poster
+            let assignedSelect = `<select class="table-select" data-row="${rowIndex}" data-col="assigned">`;
+            MEMBERS.forEach(m => {
+                const selected = m === row.assigned ? 'selected' : '';
+                assignedSelect += `<option value="${m}" ${selected}>${m}</option>`;
+            });
+            assignedSelect += `</select>`;
 
-    // Tab buttons event listeners
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            activeSource = btn.dataset.source;
-            fetchFeed(activeSource);
+            // Build dropdown select options for Backup Poster
+            let backupSelect = `<select class="table-select" data-row="${rowIndex}" data-col="backup">`;
+            MEMBERS.forEach(m => {
+                const selected = m === row.backup ? 'selected' : '';
+                backupSelect += `<option value="${m}" ${selected}>${m}</option>`;
+            });
+            backupSelect += `</select>`;
+            
+            const statusClass = row.status === 'Completed' ? 'status-cell-completed' : 'status-cell-pending';
+
+            tr.innerHTML = `
+                <td>${row.dateStr} ${isToday ? '📌' : ''}</td>
+                <td>${row.dayName}</td>
+                <td>${assignedSelect}</td>
+                <td>${backupSelect}</td>
+                <td>${row.category}</td>
+                <td><span class="${statusClass}">${row.status}</span></td>
+            `;
+
+            tbody.appendChild(tr);
+        });
+
+        // Add event listeners to dropdown changes
+        document.querySelectorAll('.table-select').forEach(select => {
+            select.addEventListener('change', (e) => {
+                const idx = parseInt(e.target.dataset.row, 10);
+                const col = e.target.dataset.col;
+                const value = e.target.value;
+                
+                // Update schedule array
+                activeSchedule[idx][col] = value;
+                
+                // Persist changes
+                localStorage.setItem('studysync_editable_schedule', JSON.stringify(activeSchedule));
+                
+                // Update hero cards
+                updateHeroDashboard();
+                showToast("Schedule updated successfully!");
+            });
+        });
+    }
+
+    // Schedule search filter
+    const searchInput = document.getElementById('schedule-search');
+    searchInput.addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase().trim();
+        
+        // Find matches in the schedule rows
+        document.querySelectorAll('#schedule-tbody tr').forEach((tr) => {
+            const dateText = tr.cells[0].textContent.toLowerCase();
+            const dayText = tr.cells[1].textContent.toLowerCase();
+            const assignedSelect = tr.cells[2].querySelector('select');
+            const backupSelect = tr.cells[3].querySelector('select');
+            const catText = tr.cells[4].textContent.toLowerCase();
+            
+            const assignedVal = assignedSelect ? assignedSelect.value.toLowerCase() : '';
+            const backupVal = backupSelect ? backupSelect.value.toLowerCase() : '';
+            
+            if (dateText.includes(query) || 
+                dayText.includes(query) || 
+                assignedVal.includes(query) || 
+                backupVal.includes(query) || 
+                catText.includes(query)) {
+                tr.style.display = "";
+            } else {
+                tr.style.display = "none";
+            }
         });
     });
 
-    // Retry button
-    document.getElementById('btn-retry-feed').addEventListener('click', () => {
-        fetchFeed(activeSource);
+    // Schedule actions (Reset & CSV Export)
+    document.getElementById('btn-reset-schedule').addEventListener('click', () => {
+        if (confirm("Are you sure you want to reset all poster rearrangements back to the default rotating schedule?")) {
+            localStorage.removeItem('studysync_editable_schedule');
+            initSchedule();
+            showToast("Schedule reset to default rotation!");
+        }
     });
 
-    function showLoader(show) {
-        const loader = document.getElementById('feed-loader');
-        if (show) loader.classList.remove('hidden');
-        else loader.classList.add('hidden');
-    }
+    document.getElementById('btn-export-csv').addEventListener('click', () => {
+        let csvContent = "data:text/csv;charset=utf-8,Date,Day,Primary Poster,Backup Poster,Category,Status\n";
+        
+        activeSchedule.forEach(row => {
+            const line = `"${row.dateStr}","${row.dayName}","${row.assigned}","${row.backup}","${row.category}","${row.status}"`;
+            csvContent += line + "\n";
+        });
+        
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", `StudySync_Schedule_${new Date().toISOString().slice(0,10)}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        showToast("Downloaded schedule CSV file!");
+    });
 
-    function showError(show) {
-        const error = document.getElementById('feed-error');
-        if (show) error.classList.remove('hidden');
-        else error.classList.add('hidden');
-    }
+    // ═══════════════════════════════════════════════════════════════════════
+    //  5-DOMAINS NEWS SCRAPER PIPELINE
+    // ═══════════════════════════════════════════════════════════════════════
 
-    function fetchFeed(source) {
+    let loadedArticles = {};
+
+    function initNewsScraper() {
         showLoader(true);
         showError(false);
         document.getElementById('feed-articles').innerHTML = '';
+        loadedArticles = {};
 
-        const feedUrl = FEED_SOURCES[source];
-        const proxyFeedUrl = PROXY_URL + encodeURIComponent(feedUrl);
+        // Fetch all 5 domains concurrently
+        const fetchPromises = DOMAIN_FEEDS.map(domain => {
+            return fetchDomainWithProxyChain(domain, 0)
+                .then(parsedArticle => {
+                    loadedArticles[domain.id] = parsedArticle;
+                    renderDomainCard(domain, parsedArticle);
+                })
+                .catch(err => {
+                    console.warn(`Failed to fetch feed for domain ${domain.id}, loading fallback:`, err);
+                    const fallback = getFallback(domain.id);
+                    loadedArticles[domain.id] = fallback;
+                    renderDomainCard(domain, fallback);
+                    showError(true); // show notification badge but keep rendering
+                });
+        });
 
-        fetch(proxyFeedUrl)
-            .then(res => {
-                if (!res.ok) throw new Error('Network response not ok');
-                return res.text();
-            })
-            .then(xmlText => {
-                parseAndRenderFeed(xmlText, source);
-            })
-            .catch(err => {
-                console.error('Error fetching feed, loading fallbacks:', err);
-                loadFallbackArticles(source);
+        Promise.all(fetchPromises)
+            .finally(() => {
+                showLoader(false);
+                // Enable copy combined post button once loaded
+                document.getElementById('btn-copy-combined').disabled = false;
             });
     }
 
-    function parseAndRenderFeed(xmlText, source) {
-        try {
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(xmlText, 'text/xml');
-            const items = doc.querySelectorAll('item');
-            
-            if (!items || items.length === 0) {
-                throw new Error('No items found in feed');
-            }
-
-            const articles = [];
-            const count = Math.min(items.length, 6); // Load top 6 stories
-
-            for (let i = 0; i < count; i++) {
-                const item = items[i];
-                
-                // Extract clean text fields
-                const title = cleanText(item.querySelector('title')?.textContent || '');
-                let description = cleanText(item.querySelector('description')?.textContent || '');
-                
-                // Strip HTML tags from description if present (HBR/CNBC feeds sometimes have tags)
-                description = stripHtml(description);
-                
-                const link = item.querySelector('link')?.textContent || item.querySelector('guid')?.textContent || '';
-                const pubDate = item.querySelector('pubDate')?.textContent || new Date().toUTCString();
-                
-                if (title && description && link) {
-                    articles.push({ title, description, link, pubDate });
-                }
-            }
-
-            showLoader(false);
-            if (articles.length === 0) {
-                loadFallbackArticles(source);
-            } else {
-                renderArticles(articles);
-            }
-        } catch (e) {
-            console.error('Error parsing XML, loading fallbacks:', e);
-            loadFallbackArticles(source);
+    // Try each proxy in order of list index
+    function fetchDomainWithProxyChain(domain, proxyIndex) {
+        if (proxyIndex >= PROXIES.length) {
+            return Promise.reject(new Error("All proxies failed"));
         }
+
+        const proxy = PROXIES[proxyIndex];
+        const fullUrl = proxy + encodeURIComponent(domain.feedUrl);
+
+        return fetch(fullUrl)
+            .then(res => {
+                if (!res.ok) throw new Error(`HTTP error ${res.status}`);
+                return res.text();
+            })
+            .then(xmlText => {
+                return parseRssArticle(xmlText, domain.id);
+            })
+            .catch(err => {
+                console.log(`Proxy index ${proxyIndex} failed for ${domain.id}, trying next...`);
+                return fetchDomainWithProxyChain(domain, proxyIndex + 1);
+            });
     }
 
-    function loadFallbackArticles(source) {
-        showLoader(false);
-        showError(true); // Show retry panel but render fallbacks below it
-        renderArticles(FALLBACK_ARTICLES[source]);
+    function parseRssArticle(xmlText, domainId) {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(xmlText, 'text/xml');
+        const item = doc.querySelector('item'); // Grab the top, freshest article only
+        
+        if (!item) throw new Error("No items found in feed XML");
+
+        const title = cleanText(item.querySelector('title')?.textContent || '');
+        let description = cleanText(item.querySelector('description')?.textContent || '');
+        description = stripHtml(description);
+        
+        const link = item.querySelector('link')?.textContent || item.querySelector('guid')?.textContent || '';
+        const pubDate = item.querySelector('pubDate')?.textContent || new Date().toUTCString();
+
+        if (!title || !description || !link) {
+            throw new Error("RSS item is missing vital properties");
+        }
+
+        // Format into Background and Summary
+        return parseArticleContent(title, description, link, pubDate);
+    }
+
+    function getFallback(domainId) {
+        const item = FALLBACK_ARTICLES[domainId];
+        return parseArticleContent(item.title, item.description, item.link, item.pubDate);
     }
 
     function cleanText(text) {
@@ -337,113 +439,23 @@ document.addEventListener('DOMContentLoaded', () => {
         return doc.body.textContent || doc.body.innerText || html;
     }
 
-    function renderArticles(articles) {
-        const container = document.getElementById('feed-articles');
-        container.innerHTML = '';
-
-        articles.forEach((art, index) => {
-            const dateObj = new Date(art.pubDate);
-            const timeAgo = getTimeAgo(dateObj);
-            
-            // Format text fields into Background and Summary
-            const formatted = parseArticleContent(art.title, art.description, art.link);
-            
-            const card = document.createElement('div');
-            card.className = 'news-card';
-            card.innerHTML = `
-                <div class="news-card-header">
-                    <span class="cat-badge">${activeSource}</span>
-                    <div class="news-card-meta">
-                        <span>🕒 ${timeAgo}</span>
-                    </div>
-                </div>
-                <h3 class="news-card-title">${art.title}</h3>
-                
-                <div class="news-card-body">
-                    <div class="format-item">
-                        <strong>Title:</strong>
-                        <span>${formatted.title}</span>
-                    </div>
-                    <div class="format-item">
-                        <strong>Background:</strong>
-                        <p>${formatted.background}</p>
-                    </div>
-                    <div class="format-item">
-                        <strong>Summary:</strong>
-                        <p style="white-space: pre-line;">${formatted.summary}</p>
-                    </div>
-                    <div class="format-item">
-                        <strong>Link to Article:</strong>
-                        <a href="${formatted.link}" target="_blank">${formatted.link}</a>
-                    </div>
-                </div>
-                
-                <button class="btn btn-primary btn-sm copy-feed-btn" data-index="${index}">
-                    📋 Copy formatted message
-                </button>
-            `;
-            
-            // Attach copy action
-            card.querySelector('.copy-feed-btn').addEventListener('click', (e) => {
-                const rawMessage = 
-                    `Title: ${formatted.title}\n\n` +
-                    `Background\n${formatted.background}\n\n` +
-                    `Summary\n${formatted.summary}\n\n` +
-                    `Link to Article:\n${formatted.link}`;
-                
-                copyToClipboard(rawMessage, e.target);
-            });
-
-            container.appendChild(card);
-        });
-    }
-
-    function getTimeAgo(date) {
-        const seconds = Math.floor((new Date() - date) / 1000);
-        let interval = seconds / 31536000;
+    function parseArticleContent(title, description, link, pubDate) {
+        let cleanDesc = description.trim();
         
-        if (interval > 1) return Math.floor(interval) + " years ago";
-        interval = seconds / 2592000;
-        if (interval > 1) return Math.floor(interval) + " months ago";
-        interval = seconds / 86400;
-        if (interval > 1) return Math.floor(interval) + " days ago";
-        interval = seconds / 3600;
-        if (interval > 1) return Math.floor(interval) + " hours ago";
-        interval = seconds / 60;
-        if (interval > 1) return Math.floor(interval) + " mins ago";
-        return "just now";
-    }
-
-    /**
-     * Splits RSS description paragraphs into requested formatting structures:
-     * - Background (1-2 sentences of context)
-     * - Summary (bulleted points)
-     */
-    function parseArticleContent(title, description, link) {
-        // Remove trailing or leading junk/publisher tags
-        let cleanDesc = description
-            .replace(/The post .* appeared first on TechCrunch\./i, '')
-            .replace(/\(Bloomberg\) --/g, '')
-            .trim();
-            
-        // Split by sentences (dot + space, check for abbreviation boundaries)
+        // Split by sentences
         const sentences = cleanDesc.split(/\.\s+/).filter(s => s.trim().length > 0);
-        
         let background = "";
         let summaryLines = [];
         
         if (sentences.length <= 2) {
             background = sentences.join('. ');
             if (background.slice(-1) !== '.') background += '.';
-            // Simple split of title words for summary bullet points if description is very short
             summaryLines.push("1. Details are covered in the attached article link.");
             summaryLines.push("2. Key implications cover technology/market shifts.");
         } else {
-            // First two sentences represent the background
             background = sentences.slice(0, 2).join('. ');
             if (background.slice(-1) !== '.') background += '.';
             
-            // Remaining sentences represent the summary bullet points
             const remaining = sentences.slice(2);
             remaining.forEach((s, idx) => {
                 let cleanSentence = s.trim();
@@ -451,7 +463,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 summaryLines.push(`${idx + 1}. ${cleanSentence}`);
             });
             
-            // Safety cap: limit to 3 bullet points for readability
             if (summaryLines.length > 3) {
                 summaryLines = summaryLines.slice(0, 3);
             }
@@ -461,56 +472,138 @@ document.addEventListener('DOMContentLoaded', () => {
             title: title,
             background: background,
             summary: summaryLines.join('\n'),
-            link: link
+            link: link,
+            pubDate: pubDate
         };
     }
 
-    // ═══════════════════════════════════════════════════════════════════════
-    //  CUSTOM FORMATTER INTERACTIVE CONTROLS
-    // ═══════════════════════════════════════════════════════════════════════
+    function renderDomainCard(domain, article) {
+        const container = document.getElementById('feed-articles');
+        
+        const card = document.createElement('div');
+        card.className = 'news-card';
+        card.id = `card-${domain.id}`;
+        
+        const dateObj = new Date(article.pubDate);
+        const timeAgo = getTimeAgo(dateObj);
 
-    const customForm = document.getElementById('custom-formatter-form');
-    
-    customForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        
-        const titleVal = document.getElementById('news-title').value.trim();
-        const backgroundVal = document.getElementById('news-background').value.trim();
-        const summaryVal = document.getElementById('news-summary').value.trim();
-        const linkVal = document.getElementById('news-link').value.trim();
-        
-        // Structure exact copy format
-        const formattedMsg = 
-            `Title: ${titleVal}\n\n` +
-            `Background\n${backgroundVal}\n\n` +
-            `Summary\n${summaryVal}\n\n` +
-            `Link to Article:\n${linkVal}`;
+        card.innerHTML = `
+            <div class="news-card-header">
+                <span class="cat-badge">${domain.name}</span>
+                <div class="news-card-meta">
+                    <span>🕒 ${timeAgo}</span>
+                </div>
+            </div>
+            <h3 class="news-card-title">${article.title}</h3>
             
-        const submitBtn = document.getElementById('btn-format-copy');
-        copyToClipboard(formattedMsg, submitBtn);
-    });
+            <div class="news-card-body">
+                <div class="format-item">
+                    <strong>Title:</strong>
+                    <span>${article.title}</span>
+                </div>
+                <div class="format-item">
+                    <strong>Background:</strong>
+                    <p>${article.background}</p>
+                </div>
+                <div class="format-item">
+                    <strong>Summary:</strong>
+                    <p style="white-space: pre-line;">${article.summary}</p>
+                </div>
+                <div class="format-item">
+                    <strong>Link to Article:</strong>
+                    <a href="${article.link}" target="_blank">${article.link}</a>
+                </div>
+            </div>
+            
+            <button class="btn btn-secondary btn-sm copy-single-btn" data-id="${domain.id}">
+                📋 Copy this domain post
+            </button>
+        `;
 
-    document.getElementById('btn-clear-form').addEventListener('click', () => {
-        customForm.reset();
-        showToast("Form cleared!");
+        // Attach event listener for single domain copy
+        card.querySelector('.copy-single-btn').addEventListener('click', (e) => {
+            const rawMsg = 
+                `Title: ${article.title}\n\n` +
+                `Background\n${article.background}\n\n` +
+                `Summary\n${article.summary}\n\n` +
+                `Link to Article:\n${article.link}`;
+                
+            copyToClipboard(rawMsg, e.target);
+        });
+
+        container.appendChild(card);
+    }
+
+    function getTimeAgo(date) {
+        const seconds = Math.floor((new Date() - date) / 1000);
+        let interval = seconds / 31536000;
+        
+        if (interval > 1) return Math.floor(interval) + "y ago";
+        interval = seconds / 2592000;
+        if (interval > 1) return Math.floor(interval) + "m ago";
+        interval = seconds / 86400;
+        if (interval > 1) return Math.floor(interval) + "d ago";
+        interval = seconds / 3600;
+        if (interval > 1) return Math.floor(interval) + "h ago";
+        interval = seconds / 60;
+        if (interval > 1) return Math.floor(interval) + "m ago";
+        return "just now";
+    }
+
+    // Retry fetching
+    document.getElementById('btn-retry-feed').addEventListener('click', () => {
+        initNewsScraper();
     });
 
     // ═══════════════════════════════════════════════════════════════════════
-    //  CLIPBOARD COPY CONTROLLERS
+    //  COMBINED CLIPBOARD COPIER
     // ═══════════════════════════════════════════════════════════════════════
+
+    document.getElementById('btn-copy-combined').addEventListener('click', (e) => {
+        const today = new Date();
+        const dateStr = today.toLocaleDateString('en-US', {
+            weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+        });
+        
+        let posterName = "Assigned Member";
+        const todayRow = activeSchedule.find(row => isSameDay(row.date, today));
+        if (todayRow) posterName = todayRow.assigned;
+
+        // Compile all 5 categories into one combined string
+        let compiledMsg = `📚 *Daily StudySync News Roundup — ${dateStr}*\n`;
+        compiledMsg += `👤 *Assigned Poster:* ${posterName}\n`;
+        compiledMsg += `=========================================\n\n`;
+
+        DOMAIN_FEEDS.forEach((domain, idx) => {
+            const art = loadedArticles[domain.id];
+            if (art) {
+                compiledMsg += `-----------------------------------------\n`;
+                compiledMsg += `${domain.name.toUpperCase()}\n`;
+                compiledMsg += `-----------------------------------------\n`;
+                compiledMsg += `Title: ${art.title}\n\n`;
+                compiledMsg += `Background\n${art.background}\n\n`;
+                compiledMsg += `Summary\n${art.summary}\n\n`;
+                compiledMsg += `Link to Article:\n${art.link}\n\n`;
+            }
+        });
+
+        compiledMsg += `=========================================\n`;
+        compiledMsg += `Mark news posting duty as Completed in StudySync Google Sheet!`;
+
+        copyToClipboard(compiledMsg, e.target);
+    });
 
     function copyToClipboard(text, triggerButton) {
         navigator.clipboard.writeText(text)
             .then(() => {
                 showToast("Message copied! Ready to paste.");
                 
-                // Visual Button Feedback
                 const originalHTML = triggerButton.innerHTML;
                 const originalClass = triggerButton.className;
                 
-                triggerButton.className = "btn btn-success btn-sm w-full";
-                if (triggerButton.id === "btn-format-copy") {
-                    triggerButton.className = "btn btn-success w-full";
+                triggerButton.className = "btn btn-success btn-sm";
+                if (triggerButton.id === "btn-copy-combined") {
+                    triggerButton.className = "btn btn-success btn-lg w-full";
                 }
                 triggerButton.innerHTML = "✓ Copied to Clipboard!";
                 
@@ -535,68 +628,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 2500);
     }
 
-    // ═══════════════════════════════════════════════════════════════════════
-    //  SCHEDULE RENDER & SEARCH CONTROLS
-    // ═══════════════════════════════════════════════════════════════════════
-
-    function renderSchedule(scheduleData) {
-        const tbody = document.getElementById('schedule-tbody');
-        tbody.innerHTML = '';
-        
-        const todayDate = new Date();
-        todayDate.setHours(0,0,0,0);
-
-        scheduleData.forEach(row => {
-            const tr = document.createElement('tr');
-            
-            // Check if today
-            const isToday = isSameDay(row.date, todayDate);
-            if (isToday) {
-                tr.className = 'today-row';
-            }
-            
-            const statusClass = row.status === 'Completed' ? 'status-cell-completed' : 'status-cell-pending';
-
-            tr.innerHTML = `
-                <td>${row.dateStr} ${isToday ? '📌' : ''}</td>
-                <td>${row.dayName}</td>
-                <td>${row.assigned}</td>
-                <td>${row.backup}</td>
-                <td>${row.category}</td>
-                <td><span class="${statusClass}">${row.status}</span></td>
-            `;
-            
-            // Allow clicking row to copy the assigned category & info directly into Formatter
-            tr.style.cursor = "pointer";
-            tr.addEventListener('click', () => {
-                document.getElementById('news-title').focus();
-                // Set default info to formatter fields
-                document.getElementById('news-link').value = "";
-                document.getElementById('news-title').value = `[Category: ${row.category}] `;
-                document.getElementById('news-background').value = `Daily business/economics news assignment for ${row.dateStr}.`;
-                
-                // Scroll smoothly to formatter card
-                document.getElementById('formatter-section').scrollIntoView({ behavior: 'smooth' });
-                showToast(`Loaded details for ${row.assigned}'s assignment!`);
-            });
-
-            tbody.appendChild(tr);
-        });
-    }
-
-    // Interactive Search
-    const searchInput = document.getElementById('schedule-search');
-    searchInput.addEventListener('input', (e) => {
-        const query = e.target.value.toLowerCase().trim();
-        
-        const filtered = activeSchedule.filter(row => {
-            return row.assigned.toLowerCase().includes(query) ||
-                   row.backup.toLowerCase().includes(query) ||
-                   row.category.toLowerCase().includes(query) ||
-                   row.dateStr.includes(query) ||
-                   row.dayName.toLowerCase().includes(query);
-        });
-        
-        renderSchedule(filtered);
+    // Set header date widget
+    const dateText = now.toLocaleDateString('en-US', {
+        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
     });
+    document.querySelector('.date-text').textContent = dateText;
+
+    // Run setup
+    initSchedule();
+    initNewsScraper();
 });

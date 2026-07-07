@@ -174,6 +174,7 @@ body {
     display: grid;
     grid-template-columns: 1.2fr 1fr 1fr;
     gap: 20px;
+    margin-bottom: 20px;
 }
 
 .info-block {
@@ -222,8 +223,11 @@ body {
     color: var(--accent-amber) !important;
 }
 
+.dashboard-actions {
+    margin-bottom: 20px;
+}
+
 .dashboard-footer {
-    margin-top: 20px;
     padding-top: 16px;
     border-top: 1px solid var(--card-border);
 }
@@ -231,11 +235,6 @@ body {
 .dashboard-footer p {
     font-size: 12px;
     color: var(--text-secondary);
-}
-
-.dashboard-footer em {
-    color: #93c5fd;
-    font-style: normal;
 }
 
 /* Main Grid Layout */
@@ -261,43 +260,6 @@ body {
 .section-title-area p {
     font-size: 13px;
     color: var(--text-secondary);
-}
-
-/* Source Tabs */
-.source-tabs {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 20px;
-    background: rgba(255, 255, 255, 0.02);
-    padding: 4px;
-    border-radius: var(--border-radius-sm);
-    border: 1px solid var(--card-border);
-}
-
-.tab-btn {
-    flex: 1;
-    background: none;
-    border: none;
-    color: var(--text-secondary);
-    padding: 10px 16px;
-    font-family: var(--font-body);
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    border-radius: 6px;
-    transition: all 0.2s ease;
-    text-align: center;
-}
-
-.tab-btn:hover {
-    color: var(--text-primary);
-    background: rgba(255, 255, 255, 0.04);
-}
-
-.tab-btn.active {
-    background: var(--accent-blue);
-    color: white;
-    box-shadow: 0 4px 12px var(--accent-blue-glow);
 }
 
 /* Loader & Error states */
@@ -340,15 +302,16 @@ body {
 .articles-grid {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 20px;
 }
 
 .news-card {
     background: var(--card-bg);
     border: 1px solid var(--card-border);
     border-radius: var(--border-radius);
-    padding: 20px;
+    padding: 24px;
     transition: border-color 0.2s ease, transform 0.2s ease;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
 }
 
 .news-card:hover {
@@ -375,31 +338,32 @@ body {
 .cat-badge {
     background: var(--accent-blue-glow);
     color: #93c5fd;
-    padding: 2px 8px;
+    padding: 3px 10px;
     border-radius: 12px;
     font-size: 10px;
-    font-weight: 600;
+    font-weight: 700;
     text-transform: uppercase;
+    border: 1px solid rgba(59, 130, 246, 0.25);
 }
 
 .news-card-title {
     font-family: var(--font-heading);
-    font-size: 16px;
-    font-weight: 600;
+    font-size: 18px;
+    font-weight: 700;
     color: var(--text-primary);
-    margin-bottom: 12px;
-    line-height: 1.4;
+    margin-bottom: 16px;
+    line-height: 1.45;
 }
 
 .news-card-body {
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    padding: 14px;
-    background: rgba(0, 0, 0, 0.2);
+    gap: 14px;
+    padding: 18px;
+    background: rgba(0, 0, 0, 0.25);
     border-radius: var(--border-radius-sm);
     border: 1px solid rgba(255, 255, 255, 0.03);
-    margin-bottom: 16px;
+    margin-bottom: 18px;
 }
 
 .format-item {
@@ -413,7 +377,7 @@ body {
     font-size: 11px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    margin-bottom: 2px;
+    margin-bottom: 4px;
 }
 
 .format-item p, .format-item span {
@@ -446,6 +410,15 @@ body {
     justify-content: center;
     gap: 8px;
     text-decoration: none;
+}
+
+.btn-lg {
+    padding: 16px 28px;
+    font-size: 16px;
+    border-radius: var(--border-radius);
+    font-family: var(--font-heading);
+    font-weight: 700;
+    box-shadow: 0 4px 20px var(--accent-blue-glow);
 }
 
 .btn-primary {
@@ -490,7 +463,16 @@ body {
     flex-direction: column;
 }
 
-/* Sidebar & Form */
+.text-danger {
+    color: #fca5a5 !important;
+}
+
+.text-danger:hover {
+    background: rgba(239, 68, 68, 0.15) !important;
+    border-color: rgba(239, 68, 68, 0.3) !important;
+}
+
+/* Sidebar */
 .sidebar-container {
     display: flex;
     flex-direction: column;
@@ -512,43 +494,6 @@ body {
     font-size: 12px;
     color: var(--text-secondary);
     margin-bottom: 16px;
-}
-
-.formatter-form {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-}
-
-.form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-
-.form-group label {
-    font-size: 11px;
-    color: var(--text-secondary);
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.form-group input, .form-group textarea {
-    background: rgba(0, 0, 0, 0.2);
-    border: 1px solid var(--card-border);
-    border-radius: var(--border-radius-sm);
-    padding: 10px;
-    color: var(--text-primary);
-    font-family: var(--font-body);
-    font-size: 13px;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.form-group input:focus, .form-group textarea:focus {
-    outline: none;
-    border-color: var(--accent-blue);
-    box-shadow: 0 0 0 3px var(--accent-blue-glow);
 }
 
 /* Quick Links List */
@@ -663,9 +608,10 @@ body {
 }
 
 .schedule-table td {
-    padding: 14px 16px;
+    padding: 10px 16px;
     border-bottom: 1px solid var(--card-border);
     color: var(--text-primary);
+    vertical-align: middle;
 }
 
 .schedule-table tr:last-child td {
@@ -677,7 +623,7 @@ body {
 }
 
 .schedule-table tr:hover {
-    background: rgba(255, 255, 255, 0.03);
+    background: rgba(255, 255, 255, 0.02);
 }
 
 .schedule-table tr.today-row {
@@ -688,6 +634,35 @@ body {
 
 .schedule-table tr.today-row td {
     border-bottom-color: rgba(245, 158, 11, 0.2);
+}
+
+/* Custom Dropdown Select inside Table Cell */
+.table-select {
+    background: rgba(11, 15, 25, 0.6);
+    color: var(--text-primary);
+    border: 1px solid var(--card-border);
+    border-radius: var(--border-radius-sm);
+    padding: 6px 12px;
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    width: 100%;
+    min-width: 160px;
+    transition: all 0.2s ease;
+}
+
+.table-select:focus {
+    outline: none;
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 0 2px var(--accent-blue-glow);
+    background: var(--bg-secondary);
+}
+
+.table-select option {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    padding: 8px;
 }
 
 .status-cell-pending {
@@ -771,11 +746,6 @@ body {
     .logo-area {
         flex-direction: column;
         gap: 6px;
-    }
-    
-    .source-tabs {
-        flex-direction: column;
-        gap: 4px;
     }
     
     .schedule-section .section-header {

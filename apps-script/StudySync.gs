@@ -429,7 +429,7 @@ function _generateSchedule(startDate, totalDays, includeWeekends) {
         dayName : ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][dow],
         assigned: members[mIdx % members.length],
         backup  : members[(mIdx + 1) % members.length],
-        category: categories[mIdx % categories.length],
+        category: 'All 5 Domains',
       });
       mIdx++;
     }

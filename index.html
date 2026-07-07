@@ -45,82 +45,69 @@
                     </div>
                 </div>
                 <div class="info-block news-category">
-                    <span class="label">News Category Topic</span>
-                    <span class="value category-text" id="today-category">Loading...</span>
+                    <span class="label">Today's Category</span>
+                    <span class="value category-text" id="today-category">All 5 Domains</span>
                 </div>
                 <div class="info-block backup-poster">
                     <span class="label">Backup Poster</span>
                     <span class="value" id="today-backup">Loading...</span>
                 </div>
             </div>
+            
+            <div class="dashboard-actions">
+                <button class="btn btn-primary btn-lg w-full" id="btn-copy-combined">
+                    📋 Copy Combined 5-Domain News Post (WhatsApp/Telegram Ready)
+                </button>
+            </div>
+            
             <div class="dashboard-footer">
-                <p>⚠️ <strong>Important</strong>: Today's post must belong to: <em>Business, Commerce, Economics, Industry, or Technology/Innovation in Business</em>.</p>
+                <p>⚠️ <strong>Duty Rule</strong>: Today's poster is required to post <strong>1 news article from each of the 5 domains</strong> below. Use the button above to copy all 5 in one click, or copy them individually.</p>
             </div>
         </section>
 
         <!-- MAIN LAYOUT: COLUMNS -->
         <div class="main-grid">
-            <!-- LEFT COLUMN: LIVE NEWS FEED -->
+            <!-- LEFT COLUMN: LIVE NEWS FEED (5 DOMAINS) -->
             <div class="news-feed-container">
                 <div class="section-title-area">
-                    <h2>📰 Daily News Explorer</h2>
-                    <p>Select a source to browse today's top stories. Click "Copy Post" to get a pre-formatted message.</p>
+                    <h2>📰 Today's Daily News Compiler</h2>
+                    <p>Fetching real-time business and tech updates for today. Scroll down to review or copy individual items.</p>
                 </div>
 
-                <!-- Source Tabs -->
-                <div class="source-tabs">
-                    <button class="tab-btn active" data-source="techcrunch">💻 TechCrunch</button>
-                    <button class="tab-btn" data-source="cnbc">📈 CNBC Business</button>
-                    <button class="tab-btn" data-source="hbr">📚 Harvard Business Review</button>
-                </div>
-
-                <!-- Feed Output -->
+                <!-- Feed Wrapper showing all 5 domains -->
                 <div class="feed-wrapper">
                     <div id="feed-loader" class="loader-container">
                         <div class="spinner"></div>
-                        <p>Fetching latest articles...</p>
+                        <p>Fetching live news feeds for all 5 domains from Google News RSS...</p>
                     </div>
                     <div id="feed-error" class="error-container hidden">
                         <span class="error-icon">⚠️</span>
-                        <p>Failed to load news feed. Using local backup articles instead.</p>
-                        <button class="btn btn-secondary btn-sm" id="btn-retry-feed">🔄 Retry</button>
+                        <p>One or more live feeds failed to resolve. Fallback articles have been loaded instead.</p>
+                        <button class="btn btn-secondary btn-sm" id="btn-retry-feed">🔄 Retry Fetch</button>
                     </div>
+                    
+                    <!-- 5 Domains Articles Container -->
                     <div id="feed-articles" class="articles-grid">
-                        <!-- Articles injected by JavaScript -->
+                        <!-- 5 Domain News Cards will be injected by JavaScript -->
                     </div>
                 </div>
             </div>
 
-            <!-- RIGHT COLUMN: QUICK FORMATTER & QUICK LINKS -->
+            <!-- RIGHT COLUMN: CONTROLS & QUICK LINKS -->
             <div class="sidebar-container">
-                <!-- CUSTOM FORMATTER CARD -->
-                <section class="card sidebar-card scroll-target" id="formatter-section">
-                    <h3>⚡ Custom Link Formatter</h3>
-                    <p class="card-desc">Have your own article? Paste the details below to format it instantly in the group format.</p>
+                <!-- SCHEDULE MANAGER CONTROLS -->
+                <section class="card sidebar-card">
+                    <h3>⚙️ Schedule Manager</h3>
+                    <p class="card-desc">Need to rearrange duty? You can change names using the dropdowns in the schedule table below. Your edits save automatically.</p>
                     
-                    <form id="custom-formatter-form" class="formatter-form">
-                        <div class="form-group">
-                            <label for="news-title">Title</label>
-                            <input type="text" id="news-title" placeholder="e.g. Nvidia Hits Record Market Cap" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="news-background">Background</label>
-                            <textarea id="news-background" rows="3" placeholder="e.g. Nvidia's stock surged following a blowout earnings report, driven by unprecedented demand for AI accelerators globally." required></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="news-summary">Summary</label>
-                            <textarea id="news-summary" rows="4" placeholder="e.g. 1. Nvidia's share price climbed 8%, raising market value by $200B.&#10;2. Competitors are struggling to match their chip production yields.&#10;3. Analysts project the AI chip market will grow another 30% next year." required></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="news-link">Link to Article</label>
-                            <input type="url" id="news-link" placeholder="e.g. https://www.bloomberg.com/nvidia-article" required>
-                        </div>
-                        
-                        <div class="btn-group">
-                            <button type="submit" class="btn btn-primary w-full" id="btn-format-copy">💾 Format & Copy Message</button>
-                            <button type="button" class="btn btn-secondary w-full" id="btn-clear-form">Clear Form</button>
-                        </div>
-                    </form>
+                    <div class="btn-group">
+                        <button class="btn btn-secondary w-full" id="btn-export-csv">
+                            📥 Export Schedule (CSV)
+                        </button>
+                        <button class="btn btn-secondary w-full text-danger" id="btn-reset-schedule">
+                            🔄 Reset to Default Rotation
+                        </button>
+                    </div>
                 </section>
 
                 <!-- QUICK LINKS CARD -->
@@ -154,8 +141,8 @@
         <section class="card schedule-section">
             <div class="section-header">
                 <div class="title-block">
-                    <h2>📅 Complete 30-Day Rotation Schedule</h2>
-                    <p>Search your name to see your assigned posting slots.</p>
+                    <h2>📅 Complete 30-Day Rotation Schedule (Editable)</h2>
+                    <p>Rearrange posters by clicking the names and selecting a replacement from the dropdown menus.</p>
                 </div>
                 <div class="search-box-container">
                     <input type="text" id="schedule-search" placeholder="🔍 Search member name...">
@@ -168,14 +155,14 @@
                         <tr>
                             <th>Date</th>
                             <th>Day</th>
-                            <th>Primary Poster</th>
+                            <th>Primary Assigned Poster</th>
                             <th>Backup Poster</th>
                             <th>Category</th>
                             <th>Status</th>
                         </tr>
                     </thead>
                     <tbody id="schedule-tbody">
-                        <!-- Schedule rows injected by JavaScript -->
+                        <!-- Schedule rows injected by JavaScript with inline select menus -->
                     </tbody>
                 </table>
             </div>
@@ -184,7 +171,7 @@
 
     <footer class="main-footer">
         <div class="container footer-content">
-            <p>StudySync v2.0 · Designed for MBA Study Group</p>
+            <p>StudySync v2.5 · Evolved for 5-Domain News Compilations</p>
             <p>Built with Google Apps Script + Client-side Feed Scraper · Hostable on GitHub Pages</p>
         </div>
     </footer>
