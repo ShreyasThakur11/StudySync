@@ -986,3 +986,191 @@ html[data-theme="light"] .theme-toggle .icon-moon { display: none; }
 html[data-theme="light"] .text-danger {
     color: #b91c1c !important;
 }
+
+/* ============================================================
+   Mobile refinements and subtle motion (v3.2)
+   All motion is disabled by the prefers-reduced-motion rule above.
+   ============================================================ */
+
+/* Gentle entrance for cards and news items */
+@keyframes rise-in {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.card,
+.news-card {
+    animation: rise-in 0.45s cubic-bezier(0.2, 0.7, 0.3, 1) backwards;
+}
+
+.news-card:nth-child(1) { animation-delay: 0.04s; }
+.news-card:nth-child(2) { animation-delay: 0.10s; }
+.news-card:nth-child(3) { animation-delay: 0.16s; }
+.news-card:nth-child(4) { animation-delay: 0.22s; }
+.news-card:nth-child(5) { animation-delay: 0.28s; }
+
+/* Button micro-interactions: a soft lift, a firm press */
+.btn:hover {
+    transform: translateY(-1px);
+}
+
+.btn:active {
+    transform: translateY(0) scale(0.985);
+}
+
+.quick-link-item {
+    transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.quick-link-item:hover {
+    transform: translateX(3px);
+}
+
+/* Theme toggle: icon turns as it switches */
+.theme-toggle svg {
+    transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+
+.theme-toggle:hover svg {
+    transform: rotate(20deg);
+}
+
+.theme-toggle:active svg {
+    transform: rotate(80deg) scale(0.9);
+}
+
+/* Smooth in-page jumps (skip link), gated by reduced motion above */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Kill the gray tap flash on mobile; focus styles carry the feedback */
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Short button label swaps in on small screens */
+.btn-label-short { display: none; }
+
+/* ---------- tablets and small laptops ---------- */
+@media (max-width: 992px) {
+    .container {
+        padding: 0 18px;
+    }
+}
+
+/* ---------- phones ---------- */
+@media (max-width: 600px) {
+    .container {
+        padding: 0 14px;
+    }
+
+    /* Compact one-row header: logo left, controls right */
+    .header-container {
+        flex-direction: row;
+        gap: 10px;
+        text-align: left;
+    }
+
+    .logo-area {
+        flex-direction: row;
+        gap: 10px;
+    }
+
+    .logo-mark {
+        width: 34px;
+        height: 34px;
+    }
+
+    .logo-text h1 {
+        font-size: 19px;
+    }
+
+    .logo-text p {
+        font-size: 9.5px;
+    }
+
+    .time-widget {
+        font-size: 11px;
+        padding: 7px 12px;
+    }
+
+    .card {
+        padding: 20px 16px;
+        margin-bottom: 20px;
+    }
+
+    .hero-dashboard {
+        margin-top: 20px;
+    }
+
+    .info-block .value {
+        font-size: 18px;
+    }
+
+    .btn-lg {
+        padding: 15px 16px;
+        font-size: 14.5px;
+    }
+
+    .btn-label-full { display: none; }
+    .btn-label-short { display: inline; }
+
+    .section-title-area h2 {
+        font-size: 19px;
+    }
+
+    .news-card {
+        padding: 18px 14px;
+    }
+
+    .news-card-title {
+        font-size: 16px;
+    }
+
+    .news-card-body {
+        padding: 14px 12px;
+    }
+
+    /* Comfortable touch targets */
+    .btn {
+        min-height: 44px;
+    }
+
+    .table-select {
+        min-height: 42px;
+        min-width: 140px;
+    }
+
+    .schedule-table th,
+    .schedule-table td {
+        padding: 10px 12px;
+        white-space: nowrap;
+    }
+
+    .main-footer {
+        padding: 18px 0;
+    }
+
+    .toast {
+        left: 14px;
+        right: 14px;
+        transform: none;
+        text-align: center;
+    }
+
+    .toast.hidden {
+        transform: translateY(40px);
+    }
+}
+
+/* ---------- small phones ---------- */
+@media (max-width: 380px) {
+    .logo-text p {
+        display: none;
+    }
+
+    .time-widget {
+        display: none;
+    }
+}
