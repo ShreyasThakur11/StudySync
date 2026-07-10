@@ -41,6 +41,11 @@ The full rotation is editable inline: swap any day's poster from a dropdown,
 search by member name, export the schedule as CSV, or reset to the default
 rotation. Edits persist in the browser's local storage.
 
+![Light theme](docs/images/portal-hero-light.png)
+
+The portal ships with dark and light themes. It follows the system preference
+on first visit, and the sun/moon toggle in the header remembers your choice.
+
 ## The Google Workspace backend
 
 One run of `apps-script/StudySync.gs` builds the entire system in about a
@@ -93,6 +98,9 @@ docs/
 - **Accessible by default.** Semantic landmarks, skip link, visible keyboard
   focus, labelled controls, live regions for async updates, and reduced-motion
   support.
+- **Two themes, one set of tokens.** Dark and light share the same component
+  styles; the theme is a variable flip that respects the system preference and
+  persists per browser.
 - **The schedule is deterministic.** Fifteen members, thirty weekdays, each
   member exactly twice, weekends excluded. The portal and the spreadsheet
   generate the same rotation from the same rules.

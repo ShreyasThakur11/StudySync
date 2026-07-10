@@ -829,3 +829,160 @@ a:focus-visible,
         scroll-behavior: auto !important;
     }
 }
+
+/* ============================================================
+   Light theme (v3.1)
+   Tokens flip here; components with hardcoded dark values get
+   explicit overrides below. The toggle sets data-theme on <html>.
+   ============================================================ */
+
+html[data-theme="light"] {
+    --bg-primary: #f4f6fb;
+    --bg-secondary: #ffffff;
+    --card-bg: rgba(255, 255, 255, 0.82);
+    --card-border: rgba(15, 23, 42, 0.10);
+
+    --text-primary: #10213a;
+    --text-secondary: #46586e;
+    --text-muted: #5d6f85;
+
+    --glow-color: rgba(59, 130, 246, 0.16);
+}
+
+html[data-theme="light"] body {
+    background-color: var(--bg-primary);
+}
+
+html[data-theme="light"] .main-header {
+    background: rgba(244, 246, 251, 0.88);
+}
+
+html[data-theme="light"] .logo-text h1 {
+    background: linear-gradient(135deg, #10213a 50%, #1d4ed8 100%);
+    -webkit-background-clip: text;
+}
+
+html[data-theme="light"] .time-widget {
+    background: rgba(15, 23, 42, 0.05);
+}
+
+html[data-theme="light"] .card {
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+}
+
+html[data-theme="light"] .card:hover {
+    box-shadow: 0 10px 28px rgba(15, 23, 42, 0.12), 0 0 20px 0 var(--accent-blue-glow);
+}
+
+html[data-theme="light"] .news-card {
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
+}
+
+html[data-theme="light"] .news-card-body {
+    background: rgba(15, 23, 42, 0.04);
+    border-color: rgba(15, 23, 42, 0.06);
+}
+
+html[data-theme="light"] .cat-badge,
+html[data-theme="light"] .active-badge {
+    color: #1d4ed8;
+}
+
+html[data-theme="light"] .btn-secondary {
+    background: rgba(15, 23, 42, 0.05);
+}
+
+html[data-theme="light"] .btn-secondary:hover {
+    background: rgba(15, 23, 42, 0.09);
+}
+
+html[data-theme="light"] .search-box-container input,
+html[data-theme="light"] .table-select {
+    background: #ffffff;
+}
+
+html[data-theme="light"] .schedule-table th {
+    background: rgba(15, 23, 42, 0.03);
+}
+
+html[data-theme="light"] .schedule-table tr:nth-child(even) {
+    background: rgba(15, 23, 42, 0.02);
+}
+
+html[data-theme="light"] .schedule-table tr:hover {
+    background: rgba(15, 23, 42, 0.045);
+}
+
+html[data-theme="light"] .schedule-table tr.today-row {
+    background: rgba(245, 158, 11, 0.12);
+}
+
+html[data-theme="light"] .status-cell-pending,
+html[data-theme="light"] .category-text {
+    color: #b45309 !important;
+}
+
+html[data-theme="light"] .status-cell-completed {
+    color: #047857;
+}
+
+html[data-theme="light"] .status-cell-missed {
+    color: #b91c1c;
+}
+
+html[data-theme="light"] .format-item a {
+    color: #1d4ed8;
+}
+
+html[data-theme="light"] .spinner {
+    border-color: rgba(15, 23, 42, 0.08);
+    border-top-color: var(--accent-blue);
+}
+
+html[data-theme="light"] .main-footer {
+    background: rgba(244, 246, 251, 0.95);
+}
+
+/* Theme toggle button */
+.theme-toggle {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--card-border);
+    border-radius: 50%;
+    width: 38px;
+    height: 38px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--text-secondary);
+    transition: color 0.2s ease, background 0.2s ease;
+    flex-shrink: 0;
+}
+
+.theme-toggle:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.09);
+}
+
+html[data-theme="light"] .theme-toggle {
+    background: rgba(15, 23, 42, 0.05);
+}
+
+html[data-theme="light"] .theme-toggle:hover {
+    background: rgba(15, 23, 42, 0.10);
+}
+
+.theme-toggle .icon-sun { display: none; }
+.theme-toggle .icon-moon { display: block; }
+html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
+html[data-theme="light"] .theme-toggle .icon-moon { display: none; }
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+html[data-theme="light"] .text-danger {
+    color: #b91c1c !important;
+}
