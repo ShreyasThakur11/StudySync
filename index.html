@@ -3,21 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StudySync — MBA Study Group Portal</title>
-    <meta name="description" content="A simple daily news portal and scheduler for MBA Study Group members to find, format, and copy daily business and tech news posts.">
+    <title>StudySync - MBA Study Group Portal</title>
+    <meta name="description" content="Daily news portal and duty scheduler for an MBA study group: browse five business news domains, copy a formatted post in one click, and manage the 30-day rotation.">
+    <meta name="theme-color" content="#0b0f19">
+
+    <!-- Social preview -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="StudySync - MBA Study Group Portal">
+    <meta property="og:description" content="Browse five business news domains, copy a formatted post in one click, and manage the 30-day posting rotation.">
+    <meta property="og:url" content="https://shreyasthakur11.github.io/StudySync/">
+    <meta property="og:image" content="https://shreyasthakur11.github.io/StudySync/assets/social-preview.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://shreyasthakur11.github.io/StudySync/assets/social-preview.png">
+
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=2.9">
+    <link rel="stylesheet" href="style.css?v=3.0">
 </head>
 <body>
-    <div class="glow-bg"></div>
-    
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <div class="glow-bg" aria-hidden="true"></div>
+
     <header class="main-header">
         <div class="container header-container">
             <div class="logo-area">
-                <span class="logo-icon">📚</span>
+                <svg class="logo-mark" viewBox="0 0 40 40" role="img" aria-label="StudySync logo" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="4"  y="10" width="24" height="24" rx="6" fill="#f59e0b" opacity="0.9"/>
+                    <rect x="9"  y="6"  width="24" height="24" rx="6" fill="#10b981" opacity="0.92"/>
+                    <rect x="14" y="2"  width="24" height="24" rx="6" fill="#3b82f6"/>
+                    <path d="M21 14.5 26 10l5 4.5M31 13.5 26 18l-5-4.5" fill="none" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" opacity="0"/>
+                    <path d="M20.5 14h11M20.5 18h11M20.5 22h7" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round"/>
+                </svg>
                 <div class="logo-text">
                     <h1>StudySync</h1>
                     <p>MBA Study Group Management Portal</p>
@@ -29,18 +49,18 @@
         </div>
     </header>
 
-    <main class="container">
+    <main class="container" id="main-content">
         <!-- HERO DASHBOARD: TODAY'S POSTER -->
-        <section class="hero-dashboard card">
+        <section class="hero-dashboard card" aria-labelledby="hero-title">
             <div class="dashboard-header">
-                <h2>📌 Today's News Posting Duty</h2>
+                <h2 id="hero-title">Today's News Posting Duty</h2>
                 <span class="badge active-badge" id="today-badge">Active</span>
             </div>
             <div class="dashboard-grid">
                 <div class="info-block primary-poster">
                     <span class="label">Primary Assigned Poster</span>
                     <div class="value-with-icon">
-                        <span class="poster-avatar" id="poster-avatar">?</span>
+                        <span class="poster-avatar" id="poster-avatar" aria-hidden="true">?</span>
                         <span class="value" id="today-poster">Loading...</span>
                     </div>
                 </div>
@@ -49,15 +69,15 @@
                     <span class="value category-text" id="today-category">All 5 Domains</span>
                 </div>
             </div>
-            
+
             <div class="dashboard-actions">
                 <button class="btn btn-primary btn-lg w-full" id="btn-copy-combined">
-                    📋 Copy Combined 5-Domain News Post (WhatsApp/Telegram Ready)
+                    Copy Combined 5-Domain News Post (WhatsApp / Telegram Ready)
                 </button>
             </div>
-            
+
             <div class="dashboard-footer">
-                <p>⚠️ <strong>Duty Rule</strong>: Today's poster is required to post <strong>1 news article from each of the 5 domains</strong> below. Use the button above to copy all 5 in one click, or copy them individually.</p>
+                <p><strong>Duty rule</strong>: today's poster shares <strong>one article from each of the five domains</strong> below. Copy all five with the button above, or copy them one by one.</p>
             </div>
         </section>
 
@@ -66,22 +86,22 @@
             <!-- LEFT COLUMN: LIVE NEWS FEED (5 DOMAINS) -->
             <div class="news-feed-container">
                 <div class="section-title-area">
-                    <h2>📰 Today's Daily News Compiler</h2>
-                    <p>Fetching real-time business and tech updates for today. Scroll down to review or copy individual items.</p>
+                    <h2>Today's Daily News Compiler</h2>
+                    <p>Live business and technology headlines, already formatted for sharing. Review or copy individual items below.</p>
                 </div>
 
                 <!-- Feed Wrapper showing all 5 domains -->
                 <div class="feed-wrapper">
-                    <div id="feed-loader" class="loader-container">
-                        <div class="spinner"></div>
+                    <div id="feed-loader" class="loader-container" role="status" aria-live="polite">
+                        <div class="spinner" aria-hidden="true"></div>
                         <p>Fetching live news feeds for all 5 domains from Google News RSS...</p>
                     </div>
                     <div id="feed-error" class="error-container hidden">
-                        <span class="error-icon">⚠️</span>
+                        <span class="error-icon" aria-hidden="true">&#9888;</span>
                         <p>One or more live feeds failed to resolve. Fallback articles have been loaded instead.</p>
-                        <button class="btn btn-secondary btn-sm" id="btn-retry-feed">🔄 Retry Fetch</button>
+                        <button class="btn btn-secondary btn-sm" id="btn-retry-feed">Retry fetch</button>
                     </div>
-                    
+
                     <!-- 5 Domains Articles Container -->
                     <div id="feed-articles" class="articles-grid">
                         <!-- 5 Domain News Cards will be injected by JavaScript -->
@@ -92,36 +112,40 @@
             <!-- RIGHT COLUMN: CONTROLS & QUICK LINKS -->
             <div class="sidebar-container">
                 <!-- SCHEDULE MANAGER CONTROLS -->
-                <section class="card sidebar-card">
-                    <h3>⚙️ Schedule Manager</h3>
-                    <p class="card-desc">Need to rearrange duty? You can change names using the dropdowns in the schedule table below. Your edits save automatically.</p>
-                    
+                <section class="card sidebar-card" aria-labelledby="manager-title">
+                    <h3 id="manager-title">Schedule Manager</h3>
+                    <p class="card-desc">Need to rearrange duty? Change names with the dropdowns in the schedule table below. Edits save automatically in this browser.</p>
+
                     <div class="btn-group">
                         <button class="btn btn-secondary w-full" id="btn-export-csv">
-                            📥 Export Schedule (CSV)
+                            Export schedule (CSV)
                         </button>
                         <button class="btn btn-secondary w-full text-danger" id="btn-reset-schedule">
-                            🔄 Reset to Default Rotation
+                            Reset to default rotation
                         </button>
                     </div>
                 </section>
 
                 <!-- QUICK LINKS CARD -->
-                <section class="card sidebar-card">
-                    <h3>🔗 Quick System Links</h3>
+                <section class="card sidebar-card" aria-labelledby="links-title">
+                    <h3 id="links-title">Quick System Links</h3>
                     <ul class="quick-links-list">
                         <li>
                             <a href="#" class="quick-link-item" id="link-google-sheet">
-                                <span class="link-icon">📊</span>
+                                <span class="link-icon" aria-hidden="true">
+                                    <svg viewBox="0 0 24 24" width="22" height="22" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="3" width="18" height="18" rx="3" fill="#10b981"/><path d="M7 9h10M7 13h10M7 17h6" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>
+                                </span>
                                 <div class="link-text">
                                     <h4>Google Spreadsheet</h4>
-                                    <p>Check the master schedule & dashboard</p>
+                                    <p>Master schedule, dashboard and member directory</p>
                                 </div>
                             </a>
                         </li>
                         <li>
                             <a href="#" class="quick-link-item" id="link-google-form">
-                                <span class="link-icon">📝</span>
+                                <span class="link-icon" aria-hidden="true">
+                                    <svg viewBox="0 0 24 24" width="22" height="22" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="3" width="18" height="18" rx="3" fill="#8b5cf6"/><path d="M8 8h8M8 12h8M8 16h5" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/><circle cx="16.5" cy="16" r="1.2" fill="#fff"/></svg>
+                                </span>
                                 <div class="link-text">
                                     <h4>Registration Form</h4>
                                     <p>Onboard new members or update preferences</p>
@@ -134,26 +158,27 @@
         </div>
 
         <!-- 30-DAY SCHEDULE TABLE -->
-        <section class="card schedule-section">
+        <section class="card schedule-section" aria-labelledby="schedule-title">
             <div class="section-header">
                 <div class="title-block">
-                    <h2>📅 Complete 30-Day Rotation Schedule (Editable)</h2>
-                    <p>Rearrange posters by clicking the names and selecting a replacement from the dropdown menus.</p>
+                    <h2 id="schedule-title">Complete 30-Day Rotation Schedule</h2>
+                    <p>Rearrange posters by clicking a name and selecting a replacement from the dropdown.</p>
                 </div>
                 <div class="search-box-container">
-                    <input type="text" id="schedule-search" placeholder="🔍 Search member name...">
+                    <label class="visually-hidden" for="schedule-search">Search the schedule by member name</label>
+                    <input type="search" id="schedule-search" placeholder="Search member name...">
                 </div>
             </div>
-            
+
             <div class="table-container">
                 <table class="schedule-table" id="schedule-table">
                     <thead>
                         <tr>
-                            <th>Date</th>
-                            <th>Day</th>
-                            <th>Primary Assigned Poster</th>
-                            <th>Category</th>
-                            <th>Status</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Day</th>
+                            <th scope="col">Primary Assigned Poster</th>
+                            <th scope="col">Category</th>
+                            <th scope="col">Status</th>
                         </tr>
                     </thead>
                     <tbody id="schedule-tbody">
@@ -166,14 +191,14 @@
 
     <footer class="main-footer">
         <div class="container footer-content">
-            <p>StudySync v2.5 · Evolved for 5-Domain News Compilations</p>
-            <p>Built with Google Apps Script + Client-side Feed Scraper · Hostable on GitHub Pages</p>
+            <p>StudySync v3.0 · five-domain news compilation and rotation scheduling</p>
+            <p>Static portal on GitHub Pages · Google Apps Script backend · no build step, no dependencies</p>
         </div>
     </footer>
 
     <!-- Toast Notification for Copy Confirmations -->
-    <div id="toast" class="toast hidden">Copied to clipboard! ✓</div>
+    <div id="toast" class="toast hidden" role="status" aria-live="polite">Copied to clipboard</div>
 
-    <script src="app.js?v=2.9"></script>
+    <script src="app.js?v=3.0"></script>
 </body>
 </html>

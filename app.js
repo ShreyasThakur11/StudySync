@@ -1,4 +1,4 @@
-// StudySync Portal Application Logic — Version 2.5
+// StudySync Portal Application Logic - Version 2.5
 document.addEventListener('DOMContentLoaded', () => {
     // ═══════════════════════════════════════════════════════════════════════
     //  GLOBAL DATA & CONFIGURATION
@@ -572,7 +572,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (todayRow) posterName = todayRow.assigned;
 
         // Compile all 5 categories into one combined string
-        let compiledMsg = `📚 *Daily StudySync News Roundup — ${dateStr}*\n`;
+        let compiledMsg = `📚 *Daily StudySync News Roundup - ${dateStr}*\n`;
         compiledMsg += `👤 *Assigned Poster:* ${posterName}\n`;
         compiledMsg += `=========================================\n\n`;
 

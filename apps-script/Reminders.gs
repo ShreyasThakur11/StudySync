@@ -1,6 +1,6 @@
 /**
  * ╔══════════════════════════════════════════════════════════════════════╗
- * ║          StudySync – MBA Study Group Management System               ║
+ * ║          StudySync - MBA Study Group Management System               ║
  * ║                    Version 2.0.0 | Phase 2                           ║
  * ╠══════════════════════════════════════════════════════════════════════╣
  * ║  PHASE 2 AUTOMATION & REMINDERS                                      ║
@@ -147,19 +147,19 @@ function sendDailyReminder() {
   const spocName = ss.getRangeByName('CFG_SpocName').getValue();
   
   const message = 
-    `📚 *StudySync Reminder — ${dateStr}*\n\n` +
+    `📚 *StudySync Reminder - ${dateStr}*\n\n` +
     `Hi *${name}*,\n\n` +
     `You are the primary poster today for the *${groupName}*.\n\n` +
     `▪️ *Category:* ${category}\n` +
     `▪️ *Date:* ${dateStr}\n\n` +
     `Please refer to the *📰 News Sources* tab in your StudySync spreadsheet for resources. Once you have posted the daily summary to the group, please mark it as *Completed* using the custom menu.\n\n` +
     `Thank you!\n` +
-    `— StudySync System (SPoC: ${spocName})`;
+    `- StudySync System (SPoC: ${spocName})`;
 
   let sent = false;
   
   if (platform === 'Email' && email) {
-    sent = _sendEmailReminder(email, `📰 StudySync Daily Reminder — ${dateStr}`, message);
+    sent = _sendEmailReminder(email, `📰 StudySync Daily Reminder - ${dateStr}`, message);
   } else if (platform === 'WhatsApp' && mobile) {
     sent = _sendWhatsAppReminder(mobile, message);
   } else if (platform === 'Telegram') {
@@ -169,7 +169,7 @@ function sendDailyReminder() {
     } else {
       Logger.log(`⚠️ No Telegram Chat ID specified in Remarks for ${name}. Falling back to Email.`);
       if (email) {
-        sent = _sendEmailReminder(email, `📰 StudySync Daily Reminder — ${dateStr}`, message);
+        sent = _sendEmailReminder(email, `📰 StudySync Daily Reminder - ${dateStr}`, message);
       }
     }
   } else {
@@ -223,12 +223,12 @@ function sendEveningFollowUp() {
     `Please share today's news updates in the study group and mark this task as *Completed*.\n\n` +
     `If you run into issues or cannot post, please contact your SPoC *${spocName}* immediately.\n\n` +
     `Thank you!\n` +
-    `— StudySync System`;
+    `- StudySync System`;
 
   let sent = false;
   
   if (platform === 'Email' && email) {
-    sent = _sendEmailReminder(email, `⚠️ StudySync Follow-Up — News Posting Pending`, message);
+    sent = _sendEmailReminder(email, `⚠️ StudySync Follow-Up - News Posting Pending`, message);
   } else if (platform === 'WhatsApp' && mobile) {
     sent = _sendWhatsAppReminder(mobile, message);
   } else if (platform === 'Telegram') {
@@ -236,7 +236,7 @@ function sendEveningFollowUp() {
     if (telegramChatId) {
       sent = _sendTelegramReminder(telegramChatId, message);
     } else if (email) {
-      sent = _sendEmailReminder(email, `⚠️ StudySync Follow-Up — News Posting Pending`, message);
+      sent = _sendEmailReminder(email, `⚠️ StudySync Follow-Up - News Posting Pending`, message);
     }
   }
   
@@ -295,7 +295,7 @@ function sendWeeklySummary() {
       else if (status === 'Pending') pending++;
       else if (status === 'Reassigned') reassigned++;
       
-      listItems.push(`▪️ *${dateLabel}:* ${name} — *${status}*`);
+      listItems.push(`▪️ *${dateLabel}:* ${name} - *${status}*`);
     }
   });
   
@@ -310,7 +310,7 @@ function sendWeeklySummary() {
   
   const reportBody = 
     `📊 *StudySync Weekly Activity Report*\n` +
-    `*Period:* ${startStr} – ${endStr}\n` +
+    `*Period:* ${startStr} - ${endStr}\n` +
     `*Group:* ${groupName}\n\n` +
     `📈 *Completion Performance:* ${completionRate}%\n` +
     `▫️ Total Days Scheduled: ${total}\n` +
@@ -321,11 +321,11 @@ function sendWeeklySummary() {
     `📅 *Daily Status Log:*\n` +
     listItems.join('\n') + `\n\n` +
     `Great work study group! Let's keep the streak going.\n` +
-    `— StudySync Automation`;
+    `- StudySync Automation`;
 
   // 1. Email Report to the SPoC
   if (spoc && spoc.email) {
-    _sendEmailReminder(spoc.email, `📊 StudySync Weekly Summary — ${groupName}`, reportBody);
+    _sendEmailReminder(spoc.email, `📊 StudySync Weekly Summary - ${groupName}`, reportBody);
     Logger.log(`Sent weekly report email to SPoC: ${spoc.name} (${spoc.email})`);
   } else {
     Logger.log('⚠️ SPoC email details missing. Skipping SPoC email delivery.');

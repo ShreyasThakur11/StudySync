@@ -1,196 +1,104 @@
-# 📚 StudySync — MBA Study Group Management System
+# StudySync
 
-> 🌐 **Live Web Portal**: **[shreyasthakur11.github.io/StudySync](https://shreyasthakur11.github.io/StudySync/)**  
-> Browse live business and technology news feeds, format them instantly with one click, and copy the post to share in your study groups.
+**Live portal: [shreyasthakur11.github.io/StudySync](https://shreyasthakur11.github.io/StudySync/)**
 
----
+A study group management system for a 15-member MBA cohort. One member posts
+business news to the group every weekday; StudySync decides who, gathers the
+news, formats the post, and tracks the rotation.
 
-## 📋 Overview
+It has two halves that share one schedule:
 
-StudySync is a professional, formula-driven study group management system built entirely on Google Workspace. It organizes daily news-posting responsibilities, maintains member information, and collects automation consent — all ready for Phase 2 automation without any structural changes.
+- **The web portal** (this repository, hosted on GitHub Pages): shows today's
+  assigned poster, pulls live headlines for five business domains, formats a
+  WhatsApp-ready post you can copy in one click, and lets you edit the 30-day
+  rotation right in the browser.
+- **The Google Workspace backend** (`apps-script/`): one script builds a full
+  spreadsheet system (dashboard, member directory, schedule, news sources,
+  settings) plus a registration form, and a second script sends automated
+  daily reminders to whoever is on duty.
 
-**15 members · 30-day rotating schedule · Each member posts exactly twice**
+![StudySync portal](assets/social-preview.png)
 
----
+## The portal
 
-## 🚀 Quick Setup (5 minutes)
+![Today's duty and the one-click post](docs/images/portal-hero.png)
 
-### Step 1 — Open Google Apps Script
+The hero card answers the only question that matters each morning: whose turn
+is it, and what do they post? The button copies a combined five-domain news
+post, already formatted for WhatsApp or Telegram.
 
-1. Go to **[script.google.com](https://script.google.com)**
-2. Click **"New project"**
-3. Name it **`StudySync`**
+![Live news compiler](docs/images/portal-news.png)
 
-### Step 2 — Paste the Script
+The compiler pulls current headlines from Google News RSS for five domains:
+commerce, business, economics, industry, and technology. Every article is
+pre-formatted (title, background, summary, link) and has its own copy button.
+If a feed cannot be reached, curated fallback articles load instead, so the
+poster is never stuck.
 
-1. Delete all existing code in `Code.gs`
-2. Open [`apps-script/StudySync.gs`](apps-script/StudySync.gs) from this repo
-3. Copy the entire content
-4. Paste it into the Apps Script editor
+![Editable 30-day rotation](docs/images/portal-schedule.png)
 
-### Step 3 — Run the Setup
+The full rotation is editable inline: swap any day's poster from a dropdown,
+search by member name, export the schedule as CSV, or reset to the default
+rotation. Edits persist in the browser's local storage.
 
-1. In the toolbar, select function **`createStudySyncSystem`**
-2. Click **▶ Run**
-3. Click **"Review Permissions"** → **"Allow"** when prompted
-4. Wait approximately **60–90 seconds**
+## The Google Workspace backend
 
-### Step 4 — Find Your Files
+One run of `apps-script/StudySync.gs` builds the entire system in about a
+minute: a six-sheet spreadsheet (dashboard with live KPIs, member directory,
+30-day schedule, 55+ curated news sources, settings, instructions) and a
+member registration form whose responses sync automatically into the member
+directory.
 
-1. Open the **Execution Log** (View → Logs)
-2. Copy the **Spreadsheet URL** and **Form URL** from the log
-3. Both files are also saved to your **Google Drive root**
+`apps-script/Reminders.gs` adds the automation: a daily trigger reads the
+schedule, finds the member on duty, and sends the reminder through their
+preferred channel. All configuration lives in named ranges, so the scripts
+never hardcode a cell reference.
 
-### Step 5 — Share with Members
+Setup takes five minutes and is fully scripted: see
+[docs/setup-guide.md](docs/setup-guide.md).
 
-1. Share the **Spreadsheet** with your group (Viewer access for most, Editor for SPoC)
-2. Share the **Form URL** with all 15 members for onboarding
+## Running the portal locally
 
----
+The portal is plain HTML, CSS and JavaScript. No build step, no dependencies.
 
-## 📊 Spreadsheet Structure
-
-| Sheet | Tab Color | Purpose |
-|-------|-----------|---------|
-| 📊 Dashboard | Blue | Real-time KPIs, today's assignment, upcoming schedule |
-| 👥 Members | Green | Member directory with contact info and preferences |
-| 📅 Schedule | Amber | 30-day rotating schedule with status tracking |
-| 📰 News Sources | Teal | 55+ curated resources organized by 14 categories |
-| ⚙️ Settings | Purple | System configuration — edit here, automation reads here |
-| 📖 Instructions | Gray | User guide covering all features |
-
----
-
-## 🧩 Features
-
-### Members Sheet
-- Pre-populated with all 15 member names
-- Dropdowns: Automation Opt-In (Yes/No), Platform (WhatsApp/Telegram/Email/None), Active (TRUE/FALSE)
-- Green/Red conditional formatting for opt-in and active status
-- Frozen headers, alternating rows, protected ID column
-
-### Schedule Sheet
-- Auto-generated 30-day rotation (each of 15 members appears exactly twice)
-- Weekends excluded by default (configurable)
-- Today's row highlighted in amber with bold border
-- Status dropdown: Pending / Completed / Missed / Reassigned
-- Color-coded status: Green = Completed, Yellow = Pending, Red = Missed, Blue = Reassigned
-
-### Dashboard
-- **Today's Assignment** — live lookup from schedule
-- **Tomorrow's Assignment** — always one step ahead
-- **5 KPI tiles**: Total Members, Active, Completed, Pending, Missed
-- **Completion Rate** — auto-calculated percentage
-- **Upcoming 7-Day Table** — next week at a glance
-- **Member Participation Tracker** — per-member completion breakdown
-
-### News Sources
-- 55+ curated resources across 14 categories
-- Categories: Business, Economics, Finance, Markets, Technology/AI, Strategy, Consulting, Operations, Supply Chain, ESG, Startups, Leadership, Indian Economy, Global Economy, Government Policy, Manufacturing
-- Priority rating with color coding (High/Medium/Low)
-- Suggested reading time per source
-
-### Settings Sheet
-- Central configuration for all system parameters
-- All Phase 2 automation settings pre-populated (reminder time, interval, max reminders)
-- Named ranges expose every setting to future automation scripts
-
----
-
-## 📝 Google Form
-
-**Title**: Study Group Automation Registration
-
-**Fields**:
-1. Full Name *(required)*
-2. Mobile Number with country code *(required)*
-3. Email Address *(required)*
-4. Would you like automated reminders? — Yes / No *(required)*
-5. Preferred Platform — WhatsApp / Telegram / Email / None *(required)*
-6. Best Time for Reminder *(optional)*
-7. Additional Remarks *(optional)*
-
-**On submission**: The `onFormSubmit` trigger automatically finds the member by name (fuzzy match) and updates their row in the Members sheet. No duplicates are created.
-
----
-
-## 🤖 Custom Menu (StudySync Menu)
-
-After setup, a **📚 StudySync** menu appears in the spreadsheet toolbar:
-
-| Menu Item | Action |
-|-----------|--------|
-| ✅ Mark Today as Completed | One-click completion for today's assignment |
-| 🔄 Refresh Schedule | Regenerates schedule from Settings (preserves completions) |
-| 📊 Update Dashboard | Forces dashboard recalculation |
-| 🔁 Sync Form Responses | Manually syncs all form responses to Members sheet |
-| ℹ️ About StudySync | Shows system info |
-
----
-
-## 🔐 Named Ranges (Phase 2 API)
-
-The system exposes all key ranges as named ranges so Phase 2 automation can read without hardcoding:
-
-| Named Range | Points To |
-|-------------|-----------|
-| `CFG_StartDate` | Settings → Schedule Start Date |
-| `CFG_EnableWeekends` | Settings → Enable Weekends |
-| `CFG_ReminderTime` | Settings → Reminder Time |
-| `CFG_GroupName` | Settings → Study Group Name |
-| `CFG_SpocName` | Settings → SPoC Name |
-| `MBR_Names` | Members → All Names (B4:B200) |
-| `MBR_AllData` | Members → Full data block |
-| `MBR_Mobiles` | Members → Mobile Numbers |
-| `MBR_Emails` | Members → Email Addresses |
-| `MBR_OptIn` | Members → Automation Opt-In column |
-| `MBR_Platforms` | Members → Preferred Platform column |
-| `SCH_AllData` | Schedule → Full data block |
-| `SCH_Dates` | Schedule → Date column |
-| `SCH_Assigned` | Schedule → Assigned Member column |
-| `SCH_Status` | Schedule → Status column |
-
----
-
-## 🔮 Phase 2 Integration Guide
-
-See [`docs/automation-integration-guide.md`](docs/automation-integration-guide.md) for a detailed Phase 2 plan.
-
-**TL;DR**: Phase 2 automation will:
-- Read `CFG_ReminderTime` and `MBR_OptIn` to decide who to notify and when
-- Read `SCH_Assigned` to find today's member
-- Read `MBR_Mobiles`/`MBR_Emails`/`MBR_Platforms` to send the reminder
-- Update `SCH_Status` after confirmation
-- Zero structural changes to the spreadsheet required
-
----
-
-## 📁 Repository Structure
-
-```
-StudySync/
-├── index.html                         ← Web Portal index page (GitHub Pages)
-├── style.css                          ← Glassmorphism portal styles
-├── app.js                             ← RSS feed parser & scheduler logic
-├── README.md                          ← You are here
-├── apps-script/
-│   ├── StudySync.gs                   ← Phase 1 Spreadsheet Setup script
-│   └── Reminders.gs                   ← Phase 2 Daily Reminders & Triggers
-└── docs/
-    ├── setup-guide.md                 ← Step-by-step setup guide
-    ├── sheet-structure.md             ← Detailed sheet documentation
-    └── automation-integration-guide.md ← Phase 2 planning & integration guide
+```bash
+git clone https://github.com/ShreyasThakur11/StudySync.git
+cd StudySync
+python -m http.server 8000
+# open http://localhost:8000
 ```
 
----
+## Repository layout
 
-## 👤 About
+```
+index.html            the portal (single page)
+style.css             dark glassmorphism theme, accessibility styles
+app.js                feeds, formatting, schedule logic (vanilla JS)
+assets/               favicon and social preview image
+apps-script/
+  StudySync.gs        builds the spreadsheet system and form
+  Reminders.gs        daily reminder automation and triggers
+docs/
+  setup-guide.md      step-by-step Google Workspace setup
+  sheet-structure.md  every sheet, column and named range documented
+  automation-integration-guide.md   how Phase 2 reads the named ranges
+  images/             README screenshots
+```
 
-**SPoC**: Shreyas Mahendra Thakur  
-**Group**: MBA Study Group (15 members)  
-**GitHub**: [@ShreyasThakur11](https://github.com/ShreyasThakur11)  
-**Version**: 1.0.0 · Phase 1 – Foundation  
+## Design notes
 
----
+- **No servers, no keys.** The portal is static; feeds come from public RSS
+  through CORS proxies with a three-proxy fallback chain and curated offline
+  articles as the last resort.
+- **Accessible by default.** Semantic landmarks, skip link, visible keyboard
+  focus, labelled controls, live regions for async updates, and reduced-motion
+  support.
+- **The schedule is deterministic.** Fifteen members, thirty weekdays, each
+  member exactly twice, weekends excluded. The portal and the spreadsheet
+  generate the same rotation from the same rules.
 
-*Built with ❤️ using Google Apps Script — no external services, no subscriptions, no dependencies.*
+## About
+
+Built and maintained by [Shreyas Thakur](https://github.com/ShreyasThakur11)
+as the single point of contact for the study group. MIT licensed, see
+[LICENSE](LICENSE).

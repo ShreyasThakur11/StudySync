@@ -1,6 +1,6 @@
 /**
  * ╔══════════════════════════════════════════════════════════════════════╗
- * ║          StudySync – MBA Study Group Management System               ║
+ * ║          StudySync - MBA Study Group Management System               ║
  * ║                    Version 1.0.0 | Phase 1                           ║
  * ╠══════════════════════════════════════════════════════════════════════╣
  * ║  QUICK SETUP:                                                        ║
@@ -14,11 +14,11 @@
  */
 
 // ═══════════════════════════════════════════════════════════════════════
-//  GLOBAL CONFIGURATION — Modify here before running
+//  GLOBAL CONFIGURATION - Modify here before running
 // ═══════════════════════════════════════════════════════════════════════
 
 const CONFIG = {
-  SPREADSHEET_NAME : 'StudySync – MBA Study Group Management',
+  SPREADSHEET_NAME : 'StudySync - MBA Study Group Management',
   FORM_TITLE       : 'Study Group Automation Registration',
   FORM_DESCRIPTION : [
     'Welcome to the MBA Study Group Automation Registration.',
@@ -32,7 +32,7 @@ const CONFIG = {
   SPOC_NAME        : 'Shreyas Mahendra Thakur',
   SCHEDULE_DAYS    : 30,
 
-  /** Pre-populated member list – maintain insertion order */
+  /** Pre-populated member list - maintain insertion order */
   MEMBERS: [
     'Aayush',
     'Anvitha Reddy',
@@ -51,7 +51,7 @@ const CONFIG = {
     'Tanish Raina'
   ],
 
-  /** Colour palette – used across all sheets */
+  /** Colour palette - used across all sheets */
   C: {
     NAVY        : '#1e3a5f',
     NAVY_LIGHT  : '#3c4b6b',
@@ -73,7 +73,7 @@ const CONFIG = {
     GRAY        : '#5f6368',
   },
 
-  /** Rolling news categories – one per scheduled day, cycling */
+  /** Rolling news categories - one per scheduled day, cycling */
   NEWS_CATEGORIES: [
     'Business & Corporate',
     'Economics & Policy',
@@ -96,7 +96,7 @@ const CONFIG = {
 // ═══════════════════════════════════════════════════════════════════════
 
 /**
- * Master function – creates the entire StudySync system.
+ * Master function - creates the entire StudySync system.
  * Run ONCE from the Apps Script editor.
  */
 function createStudySyncSystem() {
@@ -164,7 +164,7 @@ function createStudySyncSystem() {
 }
 
 // ═══════════════════════════════════════════════════════════════════════
-//  CUSTOM MENU — auto-added when spreadsheet opens
+//  CUSTOM MENU - auto-added when spreadsheet opens
 // ═══════════════════════════════════════════════════════════════════════
 
 function onOpen() {
@@ -197,9 +197,9 @@ function _setupSettings(ss, sh) {
   const C = CONFIG.C;
 
   // Header
-  _mergeTitle(sh, 1, 1, 1, 4, '⚙️  STUDYSYNC  —  SYSTEM SETTINGS', C.NAVY, 16, 55);
+  _mergeTitle(sh, 1, 1, 1, 4, '⚙️  STUDYSYNC  -  SYSTEM SETTINGS', C.NAVY, 16, 55);
   _mergeSubtitle(sh, 2, 1, 1, 4,
-    'Edit values in column B only. Do not rename or move rows — automation reads by row number.',
+    'Edit values in column B only. Do not rename or move rows - automation reads by row number.',
     C.LIGHT_GRAY, C.GRAY);
   _mergeTitle(sh, 3, 1, 1, 4, '', C.LIGHT_GRAY, 10, 12); // Thin spacer
 
@@ -212,7 +212,7 @@ function _setupSettings(ss, sh) {
     //  Parameter                         Value                              Type        Description
     ['Study Group Name',      'MBA Study Group',                   'Text',    'Name of the study group'],
     ['SPoC Name',             'Shreyas Mahendra Thakur',           'Text',    'Single Point of Contact for all queries'],
-    ['Number of Members',     '=COUNTA(\'👥 Members\'!B4:B200)',   'Formula', 'Auto-calculated — do not edit'],
+    ['Number of Members',     '=COUNTA(\'👥 Members\'!B4:B200)',   'Formula', 'Auto-calculated - do not edit'],
     ['Schedule Start Date',   today,                               'Date',    'First day of the 30-day schedule'],
     ['Reminder Time',         '08:00',                             'Time',    'Default reminder time [Phase 2]'],
     ['Reminder Interval',     1,                                   'Number',  'Reminder frequency in days [Phase 2]'],
@@ -224,7 +224,7 @@ function _setupSettings(ss, sh) {
     ['WhatsApp Group Name',   'MBA Study Group',                   'Text',    'Group name for future WhatsApp automation'],
     ['Form Response Sheet',   'Form Responses 1',                  'Text',    'Sheet name created by Google Form'],
     ['System Version',        '1.0.0',                             'Text',    'Do not modify'],
-    ['Phase',                 '1 – Foundation',                    'Text',    'Current system phase'],
+    ['Phase',                 '1 - Foundation',                    'Text',    'Current system phase'],
     ['Last Setup',            today,                               'Date',    'Populated automatically on setup'],
   ];
 
@@ -454,7 +454,7 @@ function _setupDashboard(ss, sh) {
 
   // ── HEADER BANNER ────────────────────────────────────────────────────
   sh.getRange(1, 1, 1, 10).merge()
-    .setValue('📊  StudySync  —  Dashboard')
+    .setValue('📊  StudySync  -  Dashboard')
     .setBackground(C.NAVY).setFontColor(C.WHITE)
     .setFontSize(22).setFontWeight('bold')
     .setHorizontalAlignment('center').setVerticalAlignment('middle');
@@ -471,13 +471,13 @@ function _setupDashboard(ss, sh) {
   // ── TODAY / TOMORROW CARDS ────────────────────────────────────────────
   _dashCard(sh, 4, 1, 4, 5, {
     label   : "📌  TODAY'S  POSTING",
-    formula : "=IFERROR(INDEX('📅 Schedule'!C:C,MATCH(TODAY(),'📅 Schedule'!A:A,0)),\"— No assignment today —\")",
+    formula : "=IFERROR(INDEX('📅 Schedule'!C:C,MATCH(TODAY(),'📅 Schedule'!A:A,0)),\"- No assignment today -\")",
     note    : '=TEXT(TODAY(),"dddd, dd MMMM yyyy")',
     hdrBg   : C.NAVY, valBg: C.LIGHT_BLUE, valColor: C.BLUE, sz: 20,
   });
   _dashCard(sh, 4, 6, 4, 5, {
     label   : "📆  TOMORROW'S  POSTING",
-    formula : "=IFERROR(INDEX('📅 Schedule'!C:C,MATCH(TODAY()+1,'📅 Schedule'!A:A,0)),\"— No assignment —\")",
+    formula : "=IFERROR(INDEX('📅 Schedule'!C:C,MATCH(TODAY()+1,'📅 Schedule'!A:A,0)),\"- No assignment -\")",
     note    : '=TEXT(TODAY()+1,"dddd, dd MMMM yyyy")',
     hdrBg   : C.TEAL, valBg: '#e0f2f1', valColor: '#004d40', sz: 20,
   });
@@ -541,7 +541,7 @@ function _setupDashboard(ss, sh) {
 
   // ── UPCOMING SCHEDULE (7 days) ───────────────────────────────────────
   sh.getRange(17, 1, 1, 5).merge()
-    .setValue('📋  UPCOMING SCHEDULE — Next 7 Days')
+    .setValue('📋  UPCOMING SCHEDULE - Next 7 Days')
     .setBackground(C.NAVY).setFontColor(C.WHITE)
     .setFontWeight('bold').setFontSize(12).setHorizontalAlignment('center');
   sh.setRowHeight(17, 33);
@@ -644,75 +644,75 @@ function _setupNewsSources(ss, sh) {
 
   const data = [
     // ── Business & Corporate ──
-    ['Business & Corporate', 'Harvard Business Review — hbr.org',           'World\'s leading business management publication',                   'High',   '15 min'],
-    ['Business & Corporate', 'Wall Street Journal — wsj.com',               'Leading US business and financial newspaper',                        'High',   '20 min'],
-    ['Business & Corporate', 'Financial Times — ft.com',                    'Global business, markets and financial news',                        'High',   '20 min'],
-    ['Business & Corporate', 'Bloomberg — bloomberg.com',                   'Real-time global financial and business news',                       'High',   '15 min'],
-    ['Business & Corporate', 'Business Today — businesstoday.in',           'Indian business news and corporate affairs',                         'High',   '15 min'],
-    ['Business & Corporate', 'Forbes — forbes.com',                         'Business, investing, technology, entrepreneurship',                  'Medium', '10 min'],
+    ['Business & Corporate', 'Harvard Business Review - hbr.org',           'World\'s leading business management publication',                   'High',   '15 min'],
+    ['Business & Corporate', 'Wall Street Journal - wsj.com',               'Leading US business and financial newspaper',                        'High',   '20 min'],
+    ['Business & Corporate', 'Financial Times - ft.com',                    'Global business, markets and financial news',                        'High',   '20 min'],
+    ['Business & Corporate', 'Bloomberg - bloomberg.com',                   'Real-time global financial and business news',                       'High',   '15 min'],
+    ['Business & Corporate', 'Business Today - businesstoday.in',           'Indian business news and corporate affairs',                         'High',   '15 min'],
+    ['Business & Corporate', 'Forbes - forbes.com',                         'Business, investing, technology, entrepreneurship',                  'Medium', '10 min'],
     // ── Economics & Policy ──
-    ['Economics & Policy',   'The Economist — economist.com',               'Global economics, politics, science and technology',                 'High',   '20 min'],
-    ['Economics & Policy',   'IMF Blog — imf.org/en/Blogs',                 'International Monetary Fund economic analysis and forecasts',        'High',   '10 min'],
-    ['Economics & Policy',   'World Bank Blogs — blogs.worldbank.org',      'Global development and poverty reduction insights',                  'Medium', '10 min'],
-    ['Economics & Policy',   'NITI Aayog — niti.gov.in',                   'India\'s premier policy think tank reports and publications',        'Medium', '10 min'],
-    ['Economics & Policy',   'VoxEU — cepr.org/voxeu',                     'Research-based policy analysis by leading economists',               'Medium', '15 min'],
+    ['Economics & Policy',   'The Economist - economist.com',               'Global economics, politics, science and technology',                 'High',   '20 min'],
+    ['Economics & Policy',   'IMF Blog - imf.org/en/Blogs',                 'International Monetary Fund economic analysis and forecasts',        'High',   '10 min'],
+    ['Economics & Policy',   'World Bank Blogs - blogs.worldbank.org',      'Global development and poverty reduction insights',                  'Medium', '10 min'],
+    ['Economics & Policy',   'NITI Aayog - niti.gov.in',                   'India\'s premier policy think tank reports and publications',        'Medium', '10 min'],
+    ['Economics & Policy',   'VoxEU - cepr.org/voxeu',                     'Research-based policy analysis by leading economists',               'Medium', '15 min'],
     // ── Finance & Markets ──
-    ['Finance & Markets',    'Moneycontrol — moneycontrol.com',             'India\'s leading financial and investment portal',                   'High',   '15 min'],
-    ['Finance & Markets',    'Economic Times Markets — economictimes.com',  'Indian market news, stocks, mutual funds',                           'High',   '15 min'],
-    ['Finance & Markets',    'Mint — livemint.com',                         'Indian business and personal finance news',                          'High',   '15 min'],
-    ['Finance & Markets',    'Zerodha Varsity — zerodha.com/varsity',       'Free comprehensive financial market education',                      'Medium', '20 min'],
-    ['Finance & Markets',    'Investopedia — investopedia.com',             'Investment, finance, and economic education',                        'Medium', '10 min'],
-    ['Finance & Markets',    'NSE India — nseindia.com',                    'National Stock Exchange official data and circulars',                'Low',    '5 min'],
+    ['Finance & Markets',    'Moneycontrol - moneycontrol.com',             'India\'s leading financial and investment portal',                   'High',   '15 min'],
+    ['Finance & Markets',    'Economic Times Markets - economictimes.com',  'Indian market news, stocks, mutual funds',                           'High',   '15 min'],
+    ['Finance & Markets',    'Mint - livemint.com',                         'Indian business and personal finance news',                          'High',   '15 min'],
+    ['Finance & Markets',    'Zerodha Varsity - zerodha.com/varsity',       'Free comprehensive financial market education',                      'Medium', '20 min'],
+    ['Finance & Markets',    'Investopedia - investopedia.com',             'Investment, finance, and economic education',                        'Medium', '10 min'],
+    ['Finance & Markets',    'NSE India - nseindia.com',                    'National Stock Exchange official data and circulars',                'Low',    '5 min'],
     // ── Technology & AI ──
-    ['Technology & AI',      'MIT Technology Review — technologyreview.com','Authoritative technology and innovation insights',                   'High',   '15 min'],
-    ['Technology & AI',      'TechCrunch — techcrunch.com',                 'Startup and technology news, funding rounds',                        'High',   '10 min'],
-    ['Technology & AI',      'Wired — wired.com',                           'Technology, culture, business and their societal impact',            'Medium', '15 min'],
-    ['Technology & AI',      'The Batch (DeepLearning.AI) — deeplearning.ai','Weekly AI research and industry news digest',                      'High',   '10 min'],
-    ['Technology & AI',      'AI Business — aibusiness.com',                'Enterprise AI adoption and strategy news',                          'Medium', '10 min'],
+    ['Technology & AI',      'MIT Technology Review - technologyreview.com','Authoritative technology and innovation insights',                   'High',   '15 min'],
+    ['Technology & AI',      'TechCrunch - techcrunch.com',                 'Startup and technology news, funding rounds',                        'High',   '10 min'],
+    ['Technology & AI',      'Wired - wired.com',                           'Technology, culture, business and their societal impact',            'Medium', '15 min'],
+    ['Technology & AI',      'The Batch (DeepLearning.AI) - deeplearning.ai','Weekly AI research and industry news digest',                      'High',   '10 min'],
+    ['Technology & AI',      'AI Business - aibusiness.com',                'Enterprise AI adoption and strategy news',                          'Medium', '10 min'],
     // ── Strategy & Consulting ──
-    ['Strategy & Consulting','McKinsey Insights — mckinsey.com/insights',   'Strategy, operations, digital transformation insights',              'High',   '15 min'],
-    ['Strategy & Consulting','BCG Insights — bcg.com/insights',             'Business strategy and transformation research',                      'High',   '15 min'],
-    ['Strategy & Consulting','Bain & Company — bain.com/insights',          'Management consulting thought leadership',                           'High',   '10 min'],
-    ['Strategy & Consulting','MIT Sloan Review — sloanreview.mit.edu',      'Rigorous management research for practitioners',                     'Medium', '15 min'],
-    ['Strategy & Consulting','Deloitte Insights — deloitte.com/insights',   'Cross-industry business and technology insights',                    'Medium', '10 min'],
+    ['Strategy & Consulting','McKinsey Insights - mckinsey.com/insights',   'Strategy, operations, digital transformation insights',              'High',   '15 min'],
+    ['Strategy & Consulting','BCG Insights - bcg.com/insights',             'Business strategy and transformation research',                      'High',   '15 min'],
+    ['Strategy & Consulting','Bain & Company - bain.com/insights',          'Management consulting thought leadership',                           'High',   '10 min'],
+    ['Strategy & Consulting','MIT Sloan Review - sloanreview.mit.edu',      'Rigorous management research for practitioners',                     'Medium', '15 min'],
+    ['Strategy & Consulting','Deloitte Insights - deloitte.com/insights',   'Cross-industry business and technology insights',                    'Medium', '10 min'],
     // ── Operations & Supply Chain ──
-    ['Operations & Supply Chain','Supply Chain Dive — supplychaindive.com', 'Latest supply chain industry news and analysis',                    'High',   '10 min'],
-    ['Operations & Supply Chain','Logistics Management — logisticsmgmt.com','Logistics and supply chain management coverage',                    'Medium', '10 min'],
-    ['Operations & Supply Chain','ASCM (APICS) — ascm.org',                'Professional supply chain management association content',           'Medium', '10 min'],
-    ['Operations & Supply Chain','Supply Chain Brain — supplychainbrain.com','End-to-end supply chain technology and strategy',                  'Medium', '10 min'],
+    ['Operations & Supply Chain','Supply Chain Dive - supplychaindive.com', 'Latest supply chain industry news and analysis',                    'High',   '10 min'],
+    ['Operations & Supply Chain','Logistics Management - logisticsmgmt.com','Logistics and supply chain management coverage',                    'Medium', '10 min'],
+    ['Operations & Supply Chain','ASCM (APICS) - ascm.org',                'Professional supply chain management association content',           'Medium', '10 min'],
+    ['Operations & Supply Chain','Supply Chain Brain - supplychainbrain.com','End-to-end supply chain technology and strategy',                  'Medium', '10 min'],
     // ── ESG & Sustainability ──
-    ['ESG & Sustainability', 'GreenBiz — greenbiz.com',                     'Business and sustainability intersection news',                      'High',   '10 min'],
-    ['ESG & Sustainability', 'ESG Today — esgtoday.com',                    'Dedicated ESG investing and corporate responsibility news',          'High',   '10 min'],
-    ['ESG & Sustainability', 'World Economic Forum — weforum.org',           'Global agenda on economy, environment and society',                 'High',   '15 min'],
-    ['ESG & Sustainability', 'UN SDGs — un.org/sustainabledevelopment',     'United Nations Sustainable Development Goals updates',               'Medium', '10 min'],
+    ['ESG & Sustainability', 'GreenBiz - greenbiz.com',                     'Business and sustainability intersection news',                      'High',   '10 min'],
+    ['ESG & Sustainability', 'ESG Today - esgtoday.com',                    'Dedicated ESG investing and corporate responsibility news',          'High',   '10 min'],
+    ['ESG & Sustainability', 'World Economic Forum - weforum.org',           'Global agenda on economy, environment and society',                 'High',   '15 min'],
+    ['ESG & Sustainability', 'UN SDGs - un.org/sustainabledevelopment',     'United Nations Sustainable Development Goals updates',               'Medium', '10 min'],
     // ── Startups & Entrepreneurship ──
-    ['Startups & Entrepreneurship','Inc42 — inc42.com',                     'Indian startup ecosystem news, funding, analysis',                  'High',   '10 min'],
-    ['Startups & Entrepreneurship','VCCircle — vccircle.com',               'India PE/VC deals, fundraising and M&A news',                       'High',   '10 min'],
-    ['Startups & Entrepreneurship','Entrackr — entrackr.com',               'Indian startup financial data and funding tracker',                 'High',   '10 min'],
-    ['Startups & Entrepreneurship','YC Blog — ycombinator.com/blog',        'Y Combinator essays and founder insights',                          'Medium', '15 min'],
-    ['Startups & Entrepreneurship','Startup India — startupindia.gov.in',   'Government startup initiative news and schemes',                    'Low',    '5 min'],
+    ['Startups & Entrepreneurship','Inc42 - inc42.com',                     'Indian startup ecosystem news, funding, analysis',                  'High',   '10 min'],
+    ['Startups & Entrepreneurship','VCCircle - vccircle.com',               'India PE/VC deals, fundraising and M&A news',                       'High',   '10 min'],
+    ['Startups & Entrepreneurship','Entrackr - entrackr.com',               'Indian startup financial data and funding tracker',                 'High',   '10 min'],
+    ['Startups & Entrepreneurship','YC Blog - ycombinator.com/blog',        'Y Combinator essays and founder insights',                          'Medium', '15 min'],
+    ['Startups & Entrepreneurship','Startup India - startupindia.gov.in',   'Government startup initiative news and schemes',                    'Low',    '5 min'],
     // ── Leadership & Management ──
-    ['Leadership & Management','HBR Leadership — hbr.org/leadership',       'Leadership research, case studies and best practices',              'High',   '15 min'],
-    ['Leadership & Management','Forbes Leadership — forbes.com/leadership', 'Leadership insights and lessons from top executives',               'Medium', '10 min'],
-    ['Leadership & Management','Gallup Workplace — gallup.com/workplace',   'Workplace engagement, culture and management research',             'Medium', '10 min'],
+    ['Leadership & Management','HBR Leadership - hbr.org/leadership',       'Leadership research, case studies and best practices',              'High',   '15 min'],
+    ['Leadership & Management','Forbes Leadership - forbes.com/leadership', 'Leadership insights and lessons from top executives',               'Medium', '10 min'],
+    ['Leadership & Management','Gallup Workplace - gallup.com/workplace',   'Workplace engagement, culture and management research',             'Medium', '10 min'],
     // ── Indian Economy ──
-    ['Indian Economy',       'Reserve Bank of India — rbi.org.in',          'Monetary policy, annual reports and official publications',          'High',   '15 min'],
-    ['Indian Economy',       'CMIE — cmie.com',                             'Centre for Monitoring Indian Economy data and forecasts',            'High',   '10 min'],
-    ['Indian Economy',       'MoSPI — mospi.gov.in',                        'Ministry of Statistics: GDP, CPI and economic indicators',          'Medium', '5 min'],
-    ['Indian Economy',       'Business Standard — business-standard.com',   'Comprehensive Indian economy and business news',                    'High',   '15 min'],
-    ['Indian Economy',       'The Hindu BusinessLine — thehindubusinessline.com','Economy, agriculture and trade news from India',               'Medium', '10 min'],
+    ['Indian Economy',       'Reserve Bank of India - rbi.org.in',          'Monetary policy, annual reports and official publications',          'High',   '15 min'],
+    ['Indian Economy',       'CMIE - cmie.com',                             'Centre for Monitoring Indian Economy data and forecasts',            'High',   '10 min'],
+    ['Indian Economy',       'MoSPI - mospi.gov.in',                        'Ministry of Statistics: GDP, CPI and economic indicators',          'Medium', '5 min'],
+    ['Indian Economy',       'Business Standard - business-standard.com',   'Comprehensive Indian economy and business news',                    'High',   '15 min'],
+    ['Indian Economy',       'The Hindu BusinessLine - thehindubusinessline.com','Economy, agriculture and trade news from India',               'Medium', '10 min'],
     // ── Global Economy ──
-    ['Global Economy',       'World Bank — worldbank.org',                  'Global economic data, development reports and research',            'High',   '15 min'],
-    ['Global Economy',       'OECD — oecd.org',                             'Economic cooperation, statistics and policy analysis',              'Medium', '10 min'],
-    ['Global Economy',       'Project Syndicate — project-syndicate.org',   'Expert global economic commentary and analysis',                    'Medium', '15 min'],
+    ['Global Economy',       'World Bank - worldbank.org',                  'Global economic data, development reports and research',            'High',   '15 min'],
+    ['Global Economy',       'OECD - oecd.org',                             'Economic cooperation, statistics and policy analysis',              'Medium', '10 min'],
+    ['Global Economy',       'Project Syndicate - project-syndicate.org',   'Expert global economic commentary and analysis',                    'Medium', '15 min'],
     // ── Government & Regulations ──
-    ['Government & Regulations','PIB India — pib.gov.in',                  'Press Information Bureau: official Indian government news',         'High',   '10 min'],
-    ['Government & Regulations','Ministry of Finance — finmin.nic.in',      'Budget documents, policy updates, finance ministry releases',       'High',   '10 min'],
-    ['Government & Regulations','SEBI — sebi.gov.in',                       'Securities & Exchange Board of India circulars and orders',        'Medium', '10 min'],
-    ['Government & Regulations','MyGov — mygov.in',                         'Government initiatives, citizen engagement programmes',            'Low',    '5 min'],
+    ['Government & Regulations','PIB India - pib.gov.in',                  'Press Information Bureau: official Indian government news',         'High',   '10 min'],
+    ['Government & Regulations','Ministry of Finance - finmin.nic.in',      'Budget documents, policy updates, finance ministry releases',       'High',   '10 min'],
+    ['Government & Regulations','SEBI - sebi.gov.in',                       'Securities & Exchange Board of India circulars and orders',        'Medium', '10 min'],
+    ['Government & Regulations','MyGov - mygov.in',                         'Government initiatives, citizen engagement programmes',            'Low',    '5 min'],
     // ── Manufacturing ──
-    ['Manufacturing',        'Industry Week — industryweek.com',            'Manufacturing strategy, operations and technology news',            'Medium', '10 min'],
-    ['Manufacturing',        'Make in India — makeinindia.com',             'India manufacturing initiative news and sector reports',            'Medium', '10 min'],
+    ['Manufacturing',        'Industry Week - industryweek.com',            'Manufacturing strategy, operations and technology news',            'Medium', '10 min'],
+    ['Manufacturing',        'Make in India - makeinindia.com',             'India manufacturing initiative news and sector reports',            'Medium', '10 min'],
   ];
 
   sh.getRange(4, 1, data.length, COLS).setValues(data);
@@ -769,7 +769,7 @@ function _setupInstructions(ss, sh) {
       body: [
         'StudySync is a shared-responsibility management tool for your MBA Study Group.',
         'Every day, one member is responsible for posting curated news articles to the group, keeping all 15 members informed about business, economy, technology and more.',
-        'The system automatically rotates posting duties among all 15 members over a 30-day cycle — so each member posts EXACTLY TWICE.',
+        'The system automatically rotates posting duties among all 15 members over a 30-day cycle - so each member posts EXACTLY TWICE.',
         'This guide explains how to use every feature of the system.',
       ]
     },
@@ -799,11 +799,11 @@ function _setupInstructions(ss, sh) {
     {
       hdr: '📋  HOW TO UPDATE YOUR CONTACT INFORMATION',
       body: [
-        'Option A — Via Google Form (Recommended):',
+        'Option A - Via Google Form (Recommended):',
         '  Fill out the Study Group Automation Registration Form shared by the SPoC.',
         '  Your details will auto-populate your row in the Members sheet.',
         '',
-        'Option B — Directly in the Sheet:',
+        'Option B - Directly in the Sheet:',
         '  1. Open the 👥 Members sheet.',
         '  2. Find your name.',
         '  3. Fill in Mobile Number, Email Address, Automation Opt-In, and Preferred Platform.',
@@ -835,12 +835,12 @@ function _setupInstructions(ss, sh) {
         '1. Update "Schedule Start Date" in ⚙️ Settings.',
         '2. Change "Enable Weekends" if needed.',
         '3. Use StudySync menu → "🔄 Refresh Schedule".',
-        '4. Confirm the dialog — the schedule regenerates while preserving past completions.',
+        '4. Confirm the dialog - the schedule regenerates while preserving past completions.',
         '⚠️ WARNING: Always confirm before refreshing. Previous incomplete entries may be reset.',
       ]
     },
     {
-      hdr: '🤖  FUTURE AUTOMATION — Phase 2 Preview',
+      hdr: '🤖  FUTURE AUTOMATION - Phase 2 Preview',
       body: [
         'In Phase 2, the system will gain full automation. Here is what to expect:',
         '• Daily reminder messages sent at the configured Reminder Time.',
@@ -849,7 +849,7 @@ function _setupInstructions(ss, sh) {
         '• Automated completion reports shared with all members weekly.',
         '• Analytics: participation rates, streak tracking, missed-day reporting.',
         '📌 No changes to this spreadsheet structure will be required for Phase 2.',
-        '📌 All configuration is already in ⚙️ Settings — automation reads from there.',
+        '📌 All configuration is already in ⚙️ Settings - automation reads from there.',
       ]
     },
     {
@@ -857,8 +857,8 @@ function _setupInstructions(ss, sh) {
       body: [
         'SPoC (Single Point of Contact): Shreyas Mahendra Thakur',
         'GitHub Repository: github.com/ShreyasThakur11',
-        'System Version: 1.0.0  |  Phase: 1 – Foundation',
-        'Built with Google Apps Script — no third-party services required in Phase 1.',
+        'System Version: 1.0.0  |  Phase: 1 - Foundation',
+        'Built with Google Apps Script - no third-party services required in Phase 1.',
       ]
     },
   ];
@@ -910,48 +910,48 @@ function _createForm(ss) {
     'If you need to update your information, simply submit this form again.'
   );
 
-  // Q1 – Full Name
+  // Q1 - Full Name
   form.addTextItem()
     .setTitle('Full Name')
     .setHelpText('Enter your full name exactly as it appears in the study group list.')
     .setRequired(true);
 
-  // Q2 – Mobile
+  // Q2 - Mobile
   form.addTextItem()
     .setTitle('Mobile Number (with country code)')
     .setHelpText('Example: +91 98765 43210')
     .setRequired(true);
 
-  // Q3 – Email
+  // Q3 - Email
   form.addTextItem()
     .setTitle('Email Address')
     .setHelpText('Your primary email for study group communications.')
     .setRequired(true);
 
-  // Q4 – Opt-In
+  // Q4 - Opt-In
   form.addMultipleChoiceItem()
     .setTitle('Would you like to receive automated reminders?')
     .setHelpText('If Yes, reminders will be sent on your posting days when Phase 2 is activated.')
-    .setChoiceValues(['Yes – I want reminders', 'No – I will check the schedule manually'])
+    .setChoiceValues(['Yes - I want reminders', 'No - I will check the schedule manually'])
     .setRequired(true);
 
-  // Q5 – Platform
+  // Q5 - Platform
   form.addMultipleChoiceItem()
     .setTitle('Preferred Reminder Platform')
     .setHelpText('Select where you want to receive reminders. Only used if you opted in above.')
     .setChoiceValues(['WhatsApp', 'Telegram', 'Email', 'None'])
     .setRequired(true);
 
-  // Q6 – Best Time
+  // Q6 - Best Time
   form.addTextItem()
     .setTitle('Best Time to Receive Reminder (Optional)')
     .setHelpText('Example: 8:00 AM, 10:00 PM')
     .setRequired(false);
 
-  // Q7 – Remarks
+  // Q7 - Remarks
   form.addParagraphTextItem()
     .setTitle('Any Additional Remarks or Suggestions')
-    .setHelpText('Optional — share any preferences, constraints or feedback about the system.')
+    .setHelpText('Optional - share any preferences, constraints or feedback about the system.')
     .setRequired(false);
 
   // Link form responses to spreadsheet
@@ -1032,7 +1032,7 @@ function onFormSubmit(e) {
 
 
 // ═══════════════════════════════════════════════════════════════════════
-//  NAMED RANGES — Phase 2 automation reads these by name
+//  NAMED RANGES - Phase 2 automation reads these by name
 // ═══════════════════════════════════════════════════════════════════════
 
 function _setupNamedRanges(ss, S) {
@@ -1201,9 +1201,9 @@ function syncFormResponses() {
 function showAbout() {
   SpreadsheetApp.getUi().alert(
     'ℹ️  About StudySync',
-    'StudySync – MBA Study Group Management System\n\n' +
+    'StudySync - MBA Study Group Management System\n\n' +
     'Version  : 1.0.0\n' +
-    'Phase    : 1 – Foundation\n' +
+    'Phase    : 1 - Foundation\n' +
     'SPoC     : Shreyas Mahendra Thakur\n' +
     'GitHub   : github.com/ShreyasThakur11\n\n' +
     'Built with Google Apps Script.\n' +
@@ -1214,7 +1214,7 @@ function showAbout() {
 
 
 // ═══════════════════════════════════════════════════════════════════════
-//  HELPERS — formatting utilities
+//  HELPERS - formatting utilities
 // ═══════════════════════════════════════════════════════════════════════
 
 function _mergeTitle(sh, row, col, rows, cols, text, bg, fontSize, rowHeight) {

@@ -1,10 +1,10 @@
-# 📖 StudySync Setup Guide
+# StudySync Setup Guide
 
 This guide takes you through the complete setup of the StudySync MBA Study Group Management system, covering both the Phase 1 spreadsheet generation and Phase 2 reminder automation.
 
 ---
 
-## 🛠️ Step 1: Create the Google Apps Script Project
+## Step 1: Create the Google Apps Script Project
 
 1. Go to **[script.google.com](https://script.google.com)** and log in with your Google account.
 2. Click the **"New project"** button in the top left.
@@ -12,7 +12,7 @@ This guide takes you through the complete setup of the StudySync MBA Study Group
 
 ---
 
-## 📝 Step 2: Add the Script Files
+## Step 2: Add the Script Files
 
 Your Apps Script project needs two files:
 
@@ -32,12 +32,12 @@ Your Apps Script project needs two files:
 
 ---
 
-## 🚀 Step 3: Run the System Setup Generator
+## Step 3: Run the System Setup Generator
 
 1. In the editor toolbar, select the function **`createStudySyncSystem`** from the dropdown menu.
 2. Click **▶ Run**.
 3. Google will prompt you to authorize permissions. Click **"Review Permissions"**, select your account, click **"Advanced"**, and then click **"Go to StudySync (unsafe)"** and **"Allow"**.
-4. Wait approximately **60–90 seconds** while the script generates the spreadsheet, sheets, dashboard, form, triggers, and formulas.
+4. Wait approximately **60-90 seconds** while the script generates the spreadsheet, sheets, dashboard, form, triggers, and formulas.
 5. Inspect the **Execution Log** at the bottom of the editor. You will see:
    - **Spreadsheet URL** (open and bookmark this).
    - **Form (share) URL** (send this to group members).
@@ -45,7 +45,7 @@ Your Apps Script project needs two files:
 
 ---
 
-## 🔐 Step 4: Configure Script Secrets (For WhatsApp & Telegram)
+## Step 4: Configure Script Secrets (For WhatsApp & Telegram)
 
 If you plan to use email notifications, no extra configuration is needed. If you want to use **WhatsApp (via Twilio)** or **Telegram Bots**, you must set up credentials:
 
@@ -66,7 +66,7 @@ If you plan to use email notifications, no extra configuration is needed. If you
 
 ---
 
-## 🤖 Step 5: Activate Daily Triggers
+## Step 5: Activate Daily Triggers
 
 Once members have registered and preferences are locked in:
 
@@ -77,7 +77,7 @@ Once members have registered and preferences are locked in:
 
 ---
 
-## 🧪 Step 6: Test Notifications
+## Step 6: Test Notifications
 
 You can test notifications immediately without waiting for the scheduled times:
 

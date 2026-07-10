@@ -1,8 +1,8 @@
-# 🔮 Phase 2 Automation Integration Guide
+# Phase 2 Automation Integration Guide
 
 > StudySync · Version 2.0 Planning & Implementation Document  
 > **Status: Implemented**  
-> The core automation is now fully implemented in [Reminders.gs](file:///C:/Users/thaku/.gemini/antigravity-ide/scratch/StudySync/apps-script/Reminders.gs).
+> The core automation is now fully implemented in [Reminders.gs](../apps-script/Reminders.gs).
 
 ---
 
@@ -17,7 +17,7 @@ Phase 2 adds automated daily reminders to the StudySync system. **No changes to 
 1. **Daily trigger** fires at the time in `CFG_ReminderTime`
 2. Reads today's assigned member from `SCH_Assigned` (matched by today's date in `SCH_Dates`)
 3. Looks up the member's contact details in `MBR_AllData` using their name
-4. Checks `MBR_OptIn` — only messages members who opted in
+4. Checks `MBR_OptIn` - only messages members who opted in
 5. Sends reminder via the member's `MBR_Platforms` preference
 6. If status is not updated to "Completed" by evening, sends a follow-up
 7. Weekly summary report to all members
@@ -46,7 +46,7 @@ const maxReminders = ss.getRangeByName('CFG_MaxReminders').getValue(); // 3
 
 ## Suggested Phase 2 Architecture
 
-### Option A — Google Apps Script + Gmail
+### Option A - Google Apps Script + Gmail
 
 ```javascript
 // apps-script/Reminders.gs (NEW file, add to same project)
@@ -83,7 +83,7 @@ function sendDailyReminder() {
 
   // 3. Send reminder based on platform preference
   if (platform === 'Email' && email) {
-    GmailApp.sendEmail(email, `📰 Study Group Reminder — ${Utilities.formatDate(today,'IST','dd MMM')}`,
+    GmailApp.sendEmail(email, `📰 Study Group Reminder - ${Utilities.formatDate(today,'IST','dd MMM')}`,
       `Hi ${assignedName},\n\nThis is your reminder to post today's news.\n\nCategory: ${category}\n\nCheck the news sources sheet for curated resources.\n\nStudySync`
     );
   }
@@ -91,7 +91,7 @@ function sendDailyReminder() {
 }
 ```
 
-### Option B — WhatsApp via Twilio
+### Option B - WhatsApp via Twilio
 
 ```javascript
 function sendWhatsAppReminder(to, message) {
@@ -117,7 +117,7 @@ function sendWhatsAppReminder(to, message) {
 }
 ```
 
-### Option C — Telegram Bot
+### Option C - Telegram Bot
 
 ```javascript
 function sendTelegramMessage(chatId, message) {
